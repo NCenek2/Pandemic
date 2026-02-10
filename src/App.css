@@ -1,0 +1,57 @@
+/* Alert */
+.alert-comp {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 100%;
+  max-width: 250px;
+}
+
+.update-btn {
+  z-index: 2;
+}
+
+.error-message {
+  color: hsl(0, 50%, 40%);
+}
+
+.add-color,
+.btn-red,
+.btn-green {
+  color: white;
+}
+
+.btn-green {
+  background-color: hsla(110, 75%, 52%, 80%);
+}
+.btn-green:hover {
+  background-color: hsla(110, 75%, 32%, 80%);
+}
+
+.btn-red {
+  background-color: hsla(350, 75%, 52%, 80%);
+}
+
+.btn-red:hover {
+  background-color: hsla(350, 75%, 32%, 80%);
+}
+
+.add-color {
+  background-color: hsl(210, 85%, 58%);
+}
+
+.add-color:hover {
+  color: white;
+  background-color: hsl(210, 85%, 38%);
+}
+
+.home-container {
+  max-width: 600px;
+  margin-inline: auto;
+  margin-bottom: 1rem;
+}
+
+.pointer-events {
+  pointer-events: none;
+}

@@ -1,0 +1,54 @@
+* {
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
+  /* text-align: center; */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+ol,
+ul,
+i,
+p,
+svg,
+label {
+  margin: 0;
+  padding: 0;
+}
+
+/* Prevents rectangles */
+svg:focus {
+  outline: none;
+}
+
+svg *:focus {
+  outline: none;
+}
+
+html {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
