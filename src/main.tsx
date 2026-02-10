@@ -15,7 +15,7 @@ import StartupPage from "./Pages/StartupPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <SetupProvider>
-    <BrowserRouter>
+    <BrowserRouter basename="/Pandemic">
       <Routes>
         <Route index Component={StartupPage} />
         <Route path="/" element={<Layout />}>
