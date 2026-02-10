@@ -4,8 +4,7 @@ import useGame from "../../Hooks/useGame";
 import usePlayer from "../../Hooks/usePlayer";
 
 const ActionBase = () => {
-  const { selectedAction, setSelectedAction, isValidAction, executeAction } =
-    usePlayer();
+  const { selectedAction, setSelectedAction } = usePlayer();
   const game = useGame();
   const { currentPlayer } = game;
 

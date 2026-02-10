@@ -17,9 +17,7 @@ import type { MapperItemType } from "../Types/MapperType";
 
 export type PlayerState = {};
 
-const initState: PlayerState = {};
-
-const usePlayerContext = (initialState: PlayerState) => {
+const usePlayerContext = () => {
   const game = useGame();
   const gameFlow = useGameFlow();
   const [hasChanged, setHasChanged] = useState(false);
@@ -157,7 +155,7 @@ export const PlayerContext =
 
 export const PlayerProvider = ({ children }: ChildrenType): ReactElement => {
   return (
-    <PlayerContext.Provider value={usePlayerContext(initState)}>
+    <PlayerContext.Provider value={usePlayerContext()}>
       {children}
     </PlayerContext.Provider>
   );

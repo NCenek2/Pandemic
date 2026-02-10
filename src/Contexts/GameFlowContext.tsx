@@ -13,11 +13,7 @@ import useCamera from "../Hooks/useCamera";
 import useGame from "../Hooks/useGame";
 import type { ChildrenType } from "../Types/ChildrenType";
 
-export type GameFlowState = {};
-
-const initState: GameFlowState = {};
-
-const useGameFlowContext = (initialState: GameFlowState) => {
+const useGameFlowContext = () => {
   const { setPosition } = useCamera();
   const { setAlert } = useAlert();
   const {
@@ -254,7 +250,7 @@ export const GameFlowContext =
 
 export const GameFlowProvider = ({ children }: ChildrenType): ReactElement => {
   return (
-    <GameFlowContext.Provider value={useGameFlowContext(initState)}>
+    <GameFlowContext.Provider value={useGameFlowContext()}>
       {children}
     </GameFlowContext.Provider>
   );

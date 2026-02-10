@@ -5,8 +5,17 @@ export class StoreEventAction implements IRoleAction {
   public Name: string = "Store Event";
 
   public CanExecute(gameState: IGameState): boolean {
+    const game = gameState;
+    {
+      game;
+    }
     return false;
   }
 
-  public Execute(gameState: IGameState): void {}
+  public Execute(gameState: IGameState): void {
+    const game = gameState;
+    {
+      game;
+    }
+  }
 }

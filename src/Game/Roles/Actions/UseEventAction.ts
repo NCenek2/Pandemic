@@ -14,5 +14,10 @@ export class UseEventAction implements IRoleAction {
     return isEventCard(selectedCard);
   }
 
-  public Execute(gameState: IGameState): void {}
+  public Execute(gameState: IGameState): void {
+    const game = gameState;
+    {
+      game;
+    }
+  }
 }

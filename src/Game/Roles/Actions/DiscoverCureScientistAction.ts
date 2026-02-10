@@ -1,4 +1,3 @@
-import type { Color } from "../../../Enums/Color";
 import { isCityCard } from "../../../Guards/guards";
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IPlayerCard } from "../../../Intefaces/IPlayerCard";
@@ -8,8 +7,8 @@ import type { CityCard } from "../../Cards/CityCard";
 export class DiscoverCureScientistAction implements IRoleAction {
   public Name: string = "Discover Cure";
 
-  private playerCards: IPlayerCard[] = [];
-  private chosenColor: Color | null = null;
+  // private playerCards: IPlayerCard[] = [];
+  // private chosenColor: Color | null = null;
 
   public CanExecute(gameState: IGameState): boolean {
     const currentPlayer = gameState.currentPlayer;
