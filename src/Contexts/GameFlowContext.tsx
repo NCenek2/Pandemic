@@ -1,4 +1,4 @@
-import { createContext, useState, type ReactElement } from "react";
+import { createContext, useRef, useState, type ReactElement } from "react";
 import type { City } from "../Game/City";
 import {
   CUBE_ZOOM,
@@ -16,6 +16,7 @@ import type { ChildrenType } from "../Types/ChildrenType";
 const useGameFlowContext = () => {
   const { setPosition } = useCamera();
   const { setAlert } = useAlert();
+  const currentCardCount = useRef(0);
   const {
     infectionMarker,
     infectionCardContainer,
@@ -33,6 +34,8 @@ const useGameFlowContext = () => {
   const [mustDiscardCards, setMustDiscardCards] = useState(false);
 
   const infectCities = async () => {
+    setAlert("Infecting Cities...");
+
     const rate = infectionMarker.infectionRate;
     for (let i = 0; i < rate; i++) {
       const nextCard = infectionCardContainer.current.draw();
@@ -53,20 +56,19 @@ const useGameFlowContext = () => {
         zoom: CUBE_ZOOM,
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       setCities((prevCities) =>
         prevCities.map((city) => {
           if (city.name === nextCard.city.name) {
-            const clonedCity = city.clone();
-            clonedCity.placeCube(cube);
-            return clonedCity;
+            city.placeCube(cube);
+            return city;
           }
           return city;
         }),
       );
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
     }
   };
 
@@ -105,9 +107,8 @@ const useGameFlowContext = () => {
       setCities((prevCities) =>
         prevCities.map((city) => {
           if (city.name === nextCard.city.name) {
-            const clonedCity = city.clone();
-            clonedCity.placeCube(cube);
-            return clonedCity;
+            city.placeCube(cube);
+            return city;
           }
           return city;
         }),
@@ -116,18 +117,18 @@ const useGameFlowContext = () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     // Intensify
     infectionCardContainer.current.intensify();
   };
 
-  const drawCards = async (): Promise<number> => {
-    let count = 0;
-
+  const drawCards = async (): Promise<void> => {
     for (let i = 0; i < 2; i++) {
       const playerCard = playerCardContainer.current.draw();
       if (!playerCard) {
         gameOver();
-        return count;
+        return;
       }
 
       if (isEpidemicCard(playerCard)) {
@@ -139,15 +140,13 @@ const useGameFlowContext = () => {
         prevPlayers.map((player) => {
           if (player === currentPlayer) {
             player.addCard(playerCard);
-            count += 1;
+            currentCardCount.current = player.playerCards.length;
             return player;
           }
           return player;
         }),
       );
     }
-
-    return count;
   };
 
   const gameOver = () => {
@@ -180,26 +179,28 @@ const useGameFlowContext = () => {
         zoom: CUBE_ZOOM,
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       setCities((prevCities) =>
         prevCities.map((city) => {
           if (city.name === connectingCity.name) {
-            const clonedCity = city.clone();
-            clonedCity.placeCube(cube);
-            return clonedCity;
+            city.placeCube(cube);
+            return city;
           }
           return city;
         }),
       );
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
     }
   };
 
   const endTurn = async () => {
-    const cardCount = await drawCards();
+    currentCardCount.current = currentPlayer!.playerCards.length;
+    await drawCards();
 
     // Check Here
-    if (cardCount > MAX_ALLOWABLE_CARDS) {
+    if (currentCardCount.current > MAX_ALLOWABLE_CARDS) {
       setMustDiscardCards(true);
       return;
     }

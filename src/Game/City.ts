@@ -25,9 +25,6 @@ export class City {
     this._elements = [];
   }
 
-  private setElements(elements: IElement[]): void {
-    this._elements.push(...elements);
-  }
 
   public setConnections(cities: City[]): void {
     this.connections.push(...cities);
@@ -61,13 +58,6 @@ export class City {
 
     this._elements.push(cube);
     return true;
-  }
-
-  public clone(): City {
-    const clonedCity = new City(this.name, this.color, this.coordinates);
-    clonedCity.setConnections(this.connections);
-    clonedCity.setElements(this._elements);
-    return clonedCity;
   }
 
   private removeElement(element: IElement): boolean {

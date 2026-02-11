@@ -10,10 +10,6 @@ export class DriveOrFerryAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer;
     const destination = gameState.selectedCity;
 
-    console.log("DriveOrFerryAction CanExecute", {
-      currentLocation: currentPlayer?.currentLocation,
-      destination,
-    });
 
     if (currentPlayer == null || destination == null) return false;
 
@@ -22,10 +18,6 @@ export class DriveOrFerryAction implements IRoleAction {
       (conn) => conn === destination,
     );
 
-    console.log("DriveOrFerryAction CanExecute Conditions", {
-      condition1,
-      condition2,
-    });
 
     return condition1 && condition2;
   }

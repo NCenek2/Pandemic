@@ -111,7 +111,7 @@ export class CityInitializer {
     cities.push(seoul);
     const tokyo = new City("Tokyo", Color.Red, [139.69, 35.68]);
     cities.push(tokyo);
-    const osaka = new City("Osaka", Color.Red, [135.5, 34.69]);
+    const osaka = new City("Osaka", Color.Red, [135.5, 30.69]);
     cities.push(osaka);
     const taipei = new City("Taipei", Color.Red, [121.5, 25.04]);
     cities.push(taipei);
@@ -198,12 +198,12 @@ export class CityInitializer {
       taipei,
       shanghai,
     ]);
-    shanghai.setConnections([hongKong, beijing, seoul, tokyo]);
+    shanghai.setConnections([hongKong, beijing, seoul, tokyo, taipei]);
     beijing.setConnections([shanghai, seoul]);
     seoul.setConnections([beijing, shanghai, tokyo]);
     tokyo.setConnections([seoul, shanghai, osaka, sanFrancisco]);
     osaka.setConnections([tokyo, taipei]);
-    taipei.setConnections([osaka, hongKong, manila]);
+    taipei.setConnections([osaka, hongKong, manila, shanghai]);
     sydney.setConnections([jakarta, manila, losAngeles]);
 
     return cities;

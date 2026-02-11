@@ -21,11 +21,6 @@ export class ShareKnowledgeAction implements IRoleAction {
     const shareKnowledgeState =
       gameState.uniqueData as ShareKnowledgeStateType | null;
 
-    console.log("ShareKnowledgeAction CanExecute", {
-      currentPlayer,
-      shareKnowledgeState,
-    });
-
     if (currentPlayer == null || shareKnowledgeState == null) return false;
 
     const player1 = shareKnowledgeState.player1;

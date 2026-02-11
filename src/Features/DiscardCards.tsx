@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button, ListGroup } from "react-bootstrap";
+import type { CityCard } from "../Game/Cards/CityCard";
 import { MAX_ALLOWABLE_CARDS } from "../Game/Constants/Constants";
+import { isCityCard } from "../Guards/guards";
 import { useGame } from "../Hooks/useGame";
 import useGameFlow from "../Hooks/useGameFlow";
 import type { IPlayerCard } from "../Intefaces/IPlayerCard";
@@ -34,7 +36,8 @@ const DiscardCards = () => {
               }
             }}
           >
-            {`${playerCard.title}`}
+            {playerCard.title} (
+            {isCityCard(playerCard) && (playerCard as CityCard).city.color})
           </ListGroup.Item>
         ))}
       </ListGroup>

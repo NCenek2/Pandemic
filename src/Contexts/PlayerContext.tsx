@@ -57,7 +57,6 @@ const usePlayerContext = () => {
   };
 
   const resetPlayer = () => {
-    console.log("Resetting Player State");
     setHasChanged((prev) => !prev);
     turnCount.current += 1;
 

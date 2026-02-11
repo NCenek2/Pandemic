@@ -10,7 +10,7 @@ import { Color } from "../Enums/Color";
 import { Difficulty } from "../Enums/Difficulty";
 import { PlayerCount } from "../Enums/PlayerCount";
 import { City } from "../Game/City";
-import { MAX_OUTBREAKS, WON_GAME_URL } from "../Game/Constants/Constants";
+import { LOST_GAME_URL, MAX_OUTBREAKS, WON_GAME_URL } from "../Game/Constants/Constants";
 import { CubeContainer } from "../Game/Containers/CubeContainer";
 import { InfectionCardContainer } from "../Game/Containers/InfectionCardContainer";
 import { PlayerCardContainer } from "../Game/Containers/PlayerCardContainer";
@@ -108,7 +108,7 @@ const useGameContext = (initialState: GameState) => {
 
   useEffect(() => {
     if (outbreakMarker.outbreaks >= MAX_OUTBREAKS) {
-      window.location.href = WON_GAME_URL;
+      window.location.href = LOST_GAME_URL;
     }
   }, [outbreakMarker]);
 

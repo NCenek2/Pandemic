@@ -45,8 +45,6 @@ export class CharterFlightAction implements IRoleAction {
         (playerCard as CityCard).city == previousLocation,
     ) as CityCard;
 
-    console.log(cityCard, "City Card to Remove");
-
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {
         if (player == currentPlayer) {
