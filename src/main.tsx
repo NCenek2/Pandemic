@@ -17,9 +17,9 @@ createRoot(document.getElementById("root")!).render(
   <SetupProvider>
     <BrowserRouter basename="/Pandemic">
       <Routes>
-        <Route index Component={StartupPage} />
-        <Route path="/" element={<Layout />}>
-          <Route Component={App} path="/game" />
+        <Route path="/" Component={StartupPage} />
+        <Route path="/game" element={<Layout />}>
+          <Route index Component={App} />
         </Route>
         <Route path={LOST_GAME_URL} element={<EndGame />} />
         <Route path={WON_GAME_URL} element={<GameWon />} />
@@ -28,8 +28,4 @@ createRoot(document.getElementById("root")!).render(
   </SetupProvider>,
 );
 
-// <Route index Component={App} />
-// <Route element={<ConnectedGuard />}>
-//   <Route Component={TeamSelect} path="team-select" />
-//   <Route Component={Game} path="game" />
-// </Route>
+// Index means default child of a parent route
