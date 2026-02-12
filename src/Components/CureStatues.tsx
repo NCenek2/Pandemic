@@ -8,14 +8,24 @@ type CureStatusesProps = {
 
 const CureStatuses = ({ suffix }: CureStatusesProps) => {
   const { cures } = useGame();
-  const { setSelectedColor } = usePlayer();
+  const { selectedColor, setSelectedColor } = usePlayer();
+
+  const getVariant = (cured: boolean, color: string) => {
+    if (color === selectedColor) {
+      return cured ? "success" : "danger";
+    } else {
+      return cured ? "outline-success" : "outline-danger";
+    }
+  };
+
   return (
     <div className="d-flex justify-content-center">
       {cures.map((cure) => (
         <Button
           key={`Cure_${cure.color}${suffix}`}
           className="me-2 btn-white btn-sm"
-          variant={cure.cured ? "outline-success" : "outline-danger"}
+          // variant={cure.cured ? "outline-success" : "outline-danger"}
+          variant={getVariant(cure.cured, cure.color)}
           onClick={() => setSelectedColor(cure.color)}
         >
           {cure.color} {cure.cured}
