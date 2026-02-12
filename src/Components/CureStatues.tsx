@@ -10,12 +10,16 @@ const CureStatuses = ({ suffix }: CureStatusesProps) => {
   const { cures } = useGame();
   const { selectedColor, setSelectedColor } = usePlayer();
 
-  const getVariant = (cured: boolean, color: string) => {
-    if (color === selectedColor) {
-      return cured ? "success" : "danger";
-    } else {
-      return cured ? "outline-success" : "outline-danger";
-    }
+  const getVariant = (color: string) => {
+    if (color === "Red")
+      return color === selectedColor ? "danger" : "outline-danger";
+    if (color === "Blue")
+      return color === selectedColor ? "info" : "outline-info";
+    if (color === "Yellow")
+      return color === selectedColor ? "warning" : "outline-warning";
+    if (color === "Black")
+      return color === selectedColor ? "dark" : "outline-dark";
+    return "success";
   };
 
   return (
@@ -24,10 +28,10 @@ const CureStatuses = ({ suffix }: CureStatusesProps) => {
         <Button
           key={`Cure_${cure.color}${suffix}`}
           className="me-2 btn-white btn-sm"
-          variant={getVariant(cure.cured, cure.color)}
+          variant={getVariant(cure.color)}
           onClick={() => setSelectedColor(cure.color)}
         >
-          {cure.color} {cure.cured}
+          {cure.color} {cure.cured ? "\u2713" : "\u2717"}
         </Button>
       ))}
     </div>
