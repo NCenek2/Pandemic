@@ -3,9 +3,7 @@ import MarkerContainer from "../Components/MarkerContainer";
 
 const Header = () => {
   return (
-    <header className="d-flex align-items-center justify-content-between">
-      <h1>Pandemic</h1>
-
+    <header className="d-flex align-items-center justify-content-between p-1">
       <MarkerContainer />
       <CureStatuses suffix="_Header" />
     </header>
