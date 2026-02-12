@@ -38,6 +38,7 @@ const useGameFlowContext = () => {
     setAlert("Infecting Cities...");
 
     const rate = infectionMarker.infectionRate;
+
     for (let i = 0; i < rate; i++) {
       const nextCard = infectionCardContainer.current.draw();
       if (!nextCard) return gameOver();
@@ -111,8 +112,7 @@ const useGameFlowContext = () => {
     for (let i = 0; i < 2; i++) {
       const playerCard = playerCardContainer.current.draw();
       if (!playerCard) {
-        gameOver();
-        return;
+        return gameOver();
       }
 
       if (isEpidemicCard(playerCard)) {
