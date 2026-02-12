@@ -111,8 +111,6 @@ export class Game {
     this._status = Status.Playing;
     this.currentPlayerTurn = null;
 
-    if (this.players.length == 0) return;
-
     new GameHelper().reset();
 
     this._players = [];

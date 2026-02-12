@@ -5,9 +5,6 @@ import {
   type MutableRefObject,
   type ReactElement,
 } from "react";
-import { Color } from "../Enums/Color";
-import { Difficulty } from "../Enums/Difficulty";
-import { PlayerCount } from "../Enums/PlayerCount";
 import { City } from "../Game/City";
 import { CubeContainer } from "../Game/Containers/CubeContainer";
 import { InfectionCardContainer } from "../Game/Containers/InfectionCardContainer";
@@ -20,31 +17,11 @@ import { OutbreakMarker } from "../Game/Markers/OutbreakMarker";
 import { Player } from "../Game/Player";
 import type { ChildrenType } from "../Types/ChildrenType";
 
-export type GameState = {
-  currentPlayer: Player | null;
+type StateInitializerType = {
+  cures: Cure[];
+  cities: City[];
   infectionMarker: InfectionMarker;
   outbreakMarker: OutbreakMarker;
-  cures: Cure[];
-  playerCount: PlayerCount;
-  difficulty: Difficulty;
-};
-
-const initState: GameState = {
-  currentPlayer: null,
-  infectionMarker: new InfectionMarker(),
-  outbreakMarker: new OutbreakMarker(),
-  cures: [
-    new Cure(Color.Red),
-    new Cure(Color.Black),
-    new Cure(Color.Blue),
-    new Cure(Color.Yellow),
-  ],
-  playerCount: PlayerCount.Four,
-  difficulty: Difficulty.Easy,
-};
-
-type StateInitializerType = {
-  cities: City[];
   researchContainer: ResearchStationContainer;
   infectionCardContainer: InfectionCardContainer;
   playerCardContainer: PlayerCardContainer;
@@ -58,6 +35,9 @@ function stateInitialzers(): StateInitializerType {
   game.setup();
 
   return {
+    infectionMarker: game.infectionMarker,
+    outbreakMarker: game.outbreakMarker,
+    cures: game.cures,
     researchContainer: game.researchStationContainer,
     cities: game.cities,
     cubeContainer: game.cubeContainer,
@@ -67,9 +47,12 @@ function stateInitialzers(): StateInitializerType {
   };
 }
 
-const useGameContext = (initialState: GameState) => {
+const useGameContext = () => {
   const [
     {
+      infectionMarker: _infectionMarker,
+      outbreakMarker: _outbreakMarker,
+      cures: _cures,
       cities: _cities,
       infectionCardContainer: _infectionCardContainer,
       playerCardContainer: _playerCardContainer,
@@ -83,19 +66,15 @@ const useGameContext = (initialState: GameState) => {
   const [currentPlayer, setCurrentPlayer] = useState(_players.at(0) ?? null);
   const [cities, setCities] = useState<City[]>(_cities);
 
-  const [outbreakMarker, setOutbreakMarker] = useState(
-    initialState.outbreakMarker,
-  );
-  const [infectionMarker, setInfectionMarker] = useState(
-    initialState.infectionMarker,
-  );
+  const [outbreakMarker, setOutbreakMarker] = useState(_outbreakMarker);
+  const [infectionMarker, setInfectionMarker] = useState(_infectionMarker);
 
   const infectionCardContainer = useRef(_infectionCardContainer);
   const researchStationContainer = useRef(_researchStationContainer);
   const cubeContainer = useRef(_cubeContainer);
   const playerCardContainer = useRef(_playerCardContainer);
 
-  const [cures, setCures] = useState(initialState.cures);
+  const [cures, setCures] = useState(_cures);
 
   const [gameOver, setGameOver] = useState(false);
 
@@ -156,7 +135,7 @@ export const GameContext = createContext<UseGameContextType>(initContextState);
 
 export const GameProvider = ({ children }: ChildrenType): ReactElement => {
   return (
-    <GameContext.Provider value={useGameContext(initState)}>
+    <GameContext.Provider value={useGameContext()}>
       {children}
     </GameContext.Provider>
   );
