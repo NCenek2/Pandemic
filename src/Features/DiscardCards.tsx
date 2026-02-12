@@ -34,6 +34,7 @@ const DiscardCards = () => {
 
   return (
     <>
+      <h3>{currentPlayer?.role.name}</h3>
       <ListGroup>
         {currentPlayer?.playerCards.map((playerCard) => (
           <ListGroup.Item

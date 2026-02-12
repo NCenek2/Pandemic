@@ -36,7 +36,10 @@ function App() {
     <div className="d-flex flex-column">
       <Header />
       {mustDiscardCards ? (
-        <DiscardCards />
+        <>
+          <PandemicMap />
+          <DiscardCards />
+        </>
       ) : (
         <>
           <PandemicMap />
