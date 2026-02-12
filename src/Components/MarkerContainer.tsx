@@ -5,14 +5,14 @@ const MarkerContainer = () => {
   // 0 1 2 Green
   // 3 4 5 Yellow
   // 6 7 Red
-
-  const outbreakClassName = `bi bi-${outbreakMarker.outbreaks}-square`;
+  
+  const outbreakClassName = `bi bi-${outbreakMarker.outbreaks}-square-fill`;
   const outbreakColor =
     outbreakMarker.outbreaks < 3
-      ? "green"
+      ? "#48b627"
       : outbreakMarker.outbreaks < 6
-        ? "yellow"
-        : "red";
+        ? "#81811c"
+        : "#b63827";
 
   const infectionRateClassName = `bi bi-${infectionMarker.infectionRate}-circle`;
   return (
