@@ -1,12 +1,36 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import DiscardCards from "./Features/DiscardCards";
 import Footer from "./Features/Footer";
 import Header from "./Features/Header";
 import PandemicMap from "./Features/PandemicMap";
 import ActionBase from "./Features/Roles/ActionBase";
+import {
+  LOST_GAME_URL,
+  MAX_OUTBREAKS,
+  WON_GAME_URL,
+} from "./Game/Constants/Constants";
+import { useGame } from "./Hooks/useGame";
 import useGameFlow from "./Hooks/useGameFlow";
 
 function App() {
+  const { outbreakMarker, cures } = useGame();
   const { mustDiscardCards } = useGameFlow();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    for (const cure of cures) {
+      if (!cure.cured) return;
+    }
+
+    navigate(WON_GAME_URL);
+  }, [cures]);
+
+  useEffect(() => {
+    if (outbreakMarker.outbreaks >= MAX_OUTBREAKS) {
+      navigate(LOST_GAME_URL);
+    }
+  }, [outbreakMarker]);
 
   return (
     <div className="d-flex flex-column">

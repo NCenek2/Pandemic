@@ -1,6 +1,5 @@
 import {
   createContext,
-  useEffect,
   useRef,
   useState,
   type MutableRefObject,
@@ -10,7 +9,6 @@ import { Color } from "../Enums/Color";
 import { Difficulty } from "../Enums/Difficulty";
 import { PlayerCount } from "../Enums/PlayerCount";
 import { City } from "../Game/City";
-import { LOST_GAME_URL, MAX_OUTBREAKS, WON_GAME_URL } from "../Game/Constants/Constants";
 import { CubeContainer } from "../Game/Containers/CubeContainer";
 import { InfectionCardContainer } from "../Game/Containers/InfectionCardContainer";
 import { PlayerCardContainer } from "../Game/Containers/PlayerCardContainer";
@@ -97,20 +95,6 @@ const useGameContext = (initialState: GameState) => {
   const playerCardContainer = useRef(_playerCardContainer);
 
   const [cures, setCures] = useState(initialState.cures);
-
-  useEffect(() => {
-    for (const cure of cures) {
-      if (!cure.cured) return;
-    }
-
-    window.location.href = WON_GAME_URL;
-  }, [cures]);
-
-  useEffect(() => {
-    if (outbreakMarker.outbreaks >= MAX_OUTBREAKS) {
-      window.location.href = LOST_GAME_URL;
-    }
-  }, [outbreakMarker]);
 
   return {
     players,
