@@ -96,6 +96,8 @@ const useGameContext = (initialState: GameState) => {
 
   const [cures, setCures] = useState(initialState.cures);
 
+  const [gameOver, setGameOver] = useState(false);
+
   return {
     players,
     setPlayers,
@@ -113,6 +115,8 @@ const useGameContext = (initialState: GameState) => {
     cubeContainer,
     setInfectionMarker,
     setOutbreakMarker,
+    gameOver,
+    setGameOver,
   };
 };
 
@@ -143,6 +147,8 @@ const initContextState: UseGameContextType = {
   cubeContainer: {
     current: new CubeContainer(),
   } as MutableRefObject<CubeContainer>,
+  gameOver: false,
+  setGameOver: () => {},
 };
 
 export const GameContext = createContext<UseGameContextType>(initContextState);

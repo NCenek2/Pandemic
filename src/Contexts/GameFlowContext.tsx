@@ -3,10 +3,10 @@ import type { City } from "../Game/City";
 import {
   CUBE_ZOOM,
   DEFAULT_ZOOM,
-  LOST_GAME_URL,
   MAX_ALLOWABLE_CARDS,
   OUTBREAK_CUBE_THRESHOLD,
 } from "../Game/Constants/Constants";
+import type { Cube } from "../Game/Elements/Cube";
 import { isEpidemicCard } from "../Guards/guards";
 import { useAlert } from "../Hooks/useAlert";
 import useCamera from "../Hooks/useCamera";
@@ -29,6 +29,7 @@ const useGameFlowContext = () => {
     currentPlayer,
     setCurrentPlayer,
     setOutbreakMarker,
+    setGameOver,
   } = useGame();
 
   const [mustDiscardCards, setMustDiscardCards] = useState(false);
@@ -45,30 +46,13 @@ const useGameFlowContext = () => {
 
       // Check For Outbreak
       if (nextCard.city.GetCubeCount() >= OUTBREAK_CUBE_THRESHOLD) {
-        await outbreak(nextCard.city);
+        await outbreak(nextCard.city, new Set());
         continue;
       }
 
       cubeContainer.current.removeCube(cube!);
 
-      setPosition({
-        coordinates: nextCard.city.coordinates,
-        zoom: CUBE_ZOOM,
-      });
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      setCities((prevCities) =>
-        prevCities.map((city) => {
-          if (city.name === nextCard.city.name) {
-            city.placeCube(cube);
-            return city;
-          }
-          return city;
-        }),
-      );
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await positionAndPlaceCubeOnCity(nextCard.city, cube, CUBE_ZOOM, 1500);
     }
   };
 
@@ -98,7 +82,7 @@ const useGameFlowContext = () => {
       if (!cube) return gameOver();
 
       if (nextCard.city.GetCubeCount() >= OUTBREAK_CUBE_THRESHOLD) {
-        await outbreak(nextCard.city);
+        await outbreak(nextCard.city, new Set());
         continue;
       }
 
@@ -150,49 +134,73 @@ const useGameFlowContext = () => {
   };
 
   const gameOver = () => {
-    window.location.href = LOST_GAME_URL;
+    setGameOver(true);
   };
 
-  const outbreak = async (city: City) => {
-    setAlert(`Outbreak in ${city.name}!`);
+  const outbreak = async (
+    outbrokenCity: City,
+    citiesWithOutbreaks: Set<string>,
+  ) => {
+    setAlert(`Outbreak in ${outbrokenCity.name}!`);
 
-    setOutbreakMarker((prevMarker) => {
-      const newOutbreakMarker = prevMarker.clone();
-      newOutbreakMarker.triggerOutBreak();
-      return newOutbreakMarker;
-    });
-
-    for (const connectingCity of city.connections) {
-      const cube = cubeContainer.current.getCube(connectingCity.color);
+    if (citiesWithOutbreaks.has(outbrokenCity.name)) {
+      const cube = cubeContainer.current.getCube(outbrokenCity.color);
       if (!cube) return gameOver();
-
-      // Check for chain outbreak
-      if (connectingCity.GetCubeCount() >= OUTBREAK_CUBE_THRESHOLD) {
-        await outbreak(connectingCity);
-        continue;
-      }
 
       cubeContainer.current.removeCube(cube!);
 
-      setPosition({
-        coordinates: connectingCity.coordinates,
-        zoom: CUBE_ZOOM,
+      await positionAndPlaceCubeOnCity(outbrokenCity, cube, CUBE_ZOOM, 1500);
+    } else {
+      // Need to outbreak
+      citiesWithOutbreaks.add(outbrokenCity.name);
+
+      setOutbreakMarker((prevMarker) => {
+        const newOutbreakMarker = prevMarker.clone();
+        newOutbreakMarker.triggerOutBreak();
+        return newOutbreakMarker;
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      for (const connectingCity of outbrokenCity.connections) {
+        const cube = cubeContainer.current.getCube(connectingCity.color);
+        if (!cube) return gameOver();
 
-      setCities((prevCities) =>
-        prevCities.map((city) => {
-          if (city.name === connectingCity.name) {
-            city.placeCube(cube);
-            return city;
-          }
-          return city;
-        }),
-      );
+        // Check for chain outbreak
+        if (connectingCity.GetCubeCount() >= OUTBREAK_CUBE_THRESHOLD) {
+          await outbreak(connectingCity, citiesWithOutbreaks);
+          continue;
+        }
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+        cubeContainer.current.removeCube(cube!);
+
+        await positionAndPlaceCubeOnCity(connectingCity, cube, CUBE_ZOOM, 1500);
+      }
     }
+  };
+
+  const positionAndPlaceCubeOnCity = async (
+    selectedCity: City,
+    cube: Cube,
+    zoom: number,
+    timeout: number,
+  ) => {
+    setPosition({
+      coordinates: selectedCity.coordinates,
+      zoom,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, timeout));
+
+    setCities((prevCities) =>
+      prevCities.map((city) => {
+        if (city.name === selectedCity.name) {
+          city.placeCube(cube);
+          return city;
+        }
+        return city;
+      }),
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, timeout));
   };
 
   const endTurn = async () => {
