@@ -68,6 +68,7 @@ const usePlayerContext = () => {
 
   const endTurn = () => {
     setSelectedCard(null);
+    setSelectedAction(null);
     setUniqueData(null);
   };
 
