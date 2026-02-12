@@ -72,7 +72,7 @@ export class InfectionCardContainer {
 
     this._discardedInfectionCards.push(infectionCard);
 
-    return this.removeInfectionCard(infectionCard);
+    return true;
   }
 
   public removeInfectionCard(infectionCard: InfectionCard): boolean {
@@ -94,5 +94,7 @@ export class InfectionCardContainer {
         this._discardedInfectionCards.pop() as InfectionCard;
       this._infectionCards.push(discardedCard);
     }
+
+    this.shuffleCards();
   }
 }

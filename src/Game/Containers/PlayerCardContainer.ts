@@ -9,8 +9,14 @@ export class PlayerCardContainer {
     return this._playerCards;
   }
 
+  private _discardedPlayerCards: IPlayerCard[];
+  public get discardedPlayerCards(): IPlayerCard[] {
+    return this._discardedPlayerCards;
+  }
+
   constructor(playerCards: IPlayerCard[]) {
     this._playerCards = playerCards;
+    this._discardedPlayerCards = [];
   }
 
   public draw(): IPlayerCard | null {
@@ -31,13 +37,24 @@ export class PlayerCardContainer {
   }
 
   public removeCard(playerCard: IPlayerCard): boolean {
-    const filteredCubes = this._playerCards.filter((pc) => pc !== playerCard);
+    const filteredCards = this._playerCards.filter((pc) => pc !== playerCard);
 
-    const removed = filteredCubes.length != this._playerCards.length;
+    const removed = filteredCards.length != this._playerCards.length;
 
-    this._playerCards = filteredCubes;
+    this._playerCards = filteredCards;
 
     return removed;
+  }
+
+  public moveToDiscard(playerCard: IPlayerCard): boolean {
+    if (
+      this._discardedPlayerCards.find((dpc) => dpc === playerCard) !== undefined
+    )
+      return false;
+
+    this._discardedPlayerCards.push(playerCard);
+
+    return true;
   }
 
   public shuffleCards(): void {
@@ -87,5 +104,14 @@ export class PlayerCardContainer {
       const playerCard = this._playerCards[index];
       console.log(`${index + 1}: ${playerCard.title}`);
     }
+  }
+
+  public reset(): void {
+    while (this._discardedPlayerCards.length > 0) {
+      const discardedCard = this._discardedPlayerCards.pop() as IPlayerCard;
+      this._playerCards.push(discardedCard);
+    }
+
+    this.shuffleCards();
   }
 }

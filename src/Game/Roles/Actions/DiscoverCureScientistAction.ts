@@ -47,6 +47,7 @@ export class DiscoverCureScientistAction implements IRoleAction {
         if (player == currentPlayer) {
           for (const card of selectedCards) {
             player.removeCard(card);
+            gameState.playerCardContainer.current.moveToDiscard(card);
           }
           return player;
         }

@@ -18,7 +18,10 @@ import { Player } from "./Player";
 
 export class Game {
   private static _instance: Game | null = null;
-  public readonly players: Player[];
+  private _players: Player[];
+  public get players(): Player[] {
+    return this._players;
+  }
   public currentPlayerTurn: Player | null = null;
   public readonly atlanta: City;
   public readonly cities: City[];
@@ -57,7 +60,7 @@ export class Game {
   }
 
   private constructor() {
-    this.players = [];
+    this._players = [];
 
     //     ActionHistory = new ActionHistory(this);
     this.infectionMarker = new InfectionMarker();
@@ -111,5 +114,7 @@ export class Game {
     if (this.players.length == 0) return;
 
     new GameHelper().reset();
+
+    this._players = [];
   }
 }

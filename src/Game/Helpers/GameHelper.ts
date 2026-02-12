@@ -114,17 +114,6 @@ export class GameHelper {
     }
   }
 
-  // private void infectInitialCities()
-  // {
-  //     for (int infectionRound = 1; infectionRound < 4; infectionRound++)
-  //     {
-  //         for (int cubesToPlace = 3; cubesToPlace >= 1; cubesToPlace--)
-  //         {
-
-  //         }
-  //     }
-  // }
-
   public reset(): void {
     const game = Game.instance;
 
@@ -135,6 +124,10 @@ export class GameHelper {
       game.researchStationContainer,
     );
     this.resetPlayers(game.players, game.playerCardContainer);
+
+    game.playerCardContainer.reset();
+    game.infectionCardContainer.reset();
+
     this.resetCures(game.cures);
     game.infectionMarker.reset();
     game.outbreakMarker.reset();
@@ -184,8 +177,6 @@ export class GameHelper {
         playerCardContainer.addCard(playerCard);
       }
     }
-
-    players = [];
   }
 
   private resetCubes(

@@ -49,6 +49,7 @@ export class CharterFlightAction implements IRoleAction {
       prevPlayers.map((player) => {
         if (player == currentPlayer) {
           currentPlayer.removeCard(cityCard);
+          gameState.playerCardContainer.current.moveToDiscard(cityCard);
           return player;
         }
 

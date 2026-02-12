@@ -54,6 +54,7 @@ type StateInitializerType = {
 
 function stateInitialzers(): StateInitializerType {
   const game = Game.instance;
+  game.reset();
   game.setup();
 
   return {

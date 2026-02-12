@@ -30,6 +30,7 @@ export class BuildResearchStationActionOperationsExpertAction implements IRoleAc
       prevPlayers.map((player) => {
         if (player == currentPlayer) {
           currentPlayer.removeCard(cardToDiscard);
+          gameState.playerCardContainer.current.moveToDiscard(cardToDiscard);
           return player;
         }
 
