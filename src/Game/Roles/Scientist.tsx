@@ -9,7 +9,7 @@ import type { MapperType } from "../../Types/MapperType";
 import { BuildResearchStationAction } from "./Actions/BuildResearchStationAction";
 import { CharterFlightAction } from "./Actions/CharterFlightAction";
 import { DirectFlightAction } from "./Actions/DirectFlightAction";
-import { DiscoverCureAction } from "./Actions/DiscoverCureAction";
+import { DiscoverCureScientistAction } from "./Actions/DiscoverCureScientistAction";
 import { DriveOrFerryAction } from "./Actions/DriveOrFerryAction";
 import { ShareKnowledgeAction } from "./Actions/ShareKnowledgeAction";
 import { ShuttleFlightAction } from "./Actions/ShuttleFlightAction";
@@ -46,7 +46,7 @@ export class Scientist implements IRole {
         element: <ColorMapper />,
       },
       "Discover Cure": {
-        action: new DiscoverCureAction(),
+        action: new DiscoverCureScientistAction(),
         element: <DiscoverCureMapper />,
       },
       "Share Knowledge": {
