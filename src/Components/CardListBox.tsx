@@ -20,12 +20,25 @@ function CardListBox({
     setState(playerCard);
   };
 
+  const getItemColor = (playerCard: IPlayerCard): string => {
+    if (selectedCard === playerCard) return "-success";
+
+    if (isCityCard(playerCard)) {
+      const cityCard = playerCard as CityCard;
+      if (cityCard.city.color === "Red") return "-danger";
+      if (cityCard.city.color === "Blue") return "-info";
+      if (cityCard.city.color === "Yellow") return "-warning";
+      if (cityCard.city.color === "Black") return "-dark";
+    }
+    return "";
+  };
+
   return (
     <ListGroup>
       {playerCards.map((playerCard, index) => (
         <ListGroup.Item
           key={`${prefix}${index}`}
-          className={`user-select-none list-group-item ${selectedCard === playerCard && "active"}`}
+          className={`user-select-none list-group-item${getItemColor(playerCard)}`}
           onClick={() => changeActiveIndex(playerCard)}
         >
           {`${playerCard.title}`} (

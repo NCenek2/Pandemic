@@ -32,6 +32,19 @@ const DiscardCards = () => {
     await postCardDraw();
   };
 
+  const getItemColor = (playerCard: IPlayerCard): string => {
+    if (cardsToDiscard.includes(playerCard)) return "-success";
+
+    if (isCityCard(playerCard)) {
+      const cityCard = playerCard as CityCard;
+      if (cityCard.city.color === "Red") return "-danger";
+      if (cityCard.city.color === "Blue") return "-info";
+      if (cityCard.city.color === "Yellow") return "-warning";
+      if (cityCard.city.color === "Black") return "-dark";
+    }
+    return "";
+  };
+
   return (
     <>
       <h3>{currentPlayer?.role.name}</h3>
@@ -39,7 +52,7 @@ const DiscardCards = () => {
         {currentPlayer?.playerCards.map((playerCard) => (
           <ListGroup.Item
             key={`Discard_${playerCard.title}`}
-            className={`user-select-none list-group-item ${cardsToDiscard.includes(playerCard) && "active"}`}
+            className={`user-select-none list-group-item${getItemColor(playerCard)}`}
             onClick={() => {
               if (cardsToDiscard.includes(playerCard)) {
                 setCardsToDiscard(
