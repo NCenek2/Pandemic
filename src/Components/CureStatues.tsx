@@ -24,7 +24,6 @@ const CureStatuses = ({ suffix }: CureStatusesProps) => {
         <Button
           key={`Cure_${cure.color}${suffix}`}
           className="me-2 btn-white btn-sm"
-          // variant={cure.cured ? "outline-success" : "outline-danger"}
           variant={getVariant(cure.cured, cure.color)}
           onClick={() => setSelectedColor(cure.color)}
         >
