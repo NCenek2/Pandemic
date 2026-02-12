@@ -26,7 +26,7 @@ function PlayerListBox({
           className={`user-select-none list-group-item ${player === selectedPlayer && "active"}`}
           onClick={() => changeActivePlayer(player)}
         >
-          {`${player.role.name}`}
+          {`${player.role.name} (${player.currentLocation.name})`}
         </ListGroup.Item>
       ))}
     </ListGroup>
