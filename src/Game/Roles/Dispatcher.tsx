@@ -3,6 +3,7 @@ import CityMapper from "../../Features/Roles/Mapper/CityMapper";
 import ColorMapper from "../../Features/Roles/Mapper/ColorMapper";
 import DiscoverCureMapper from "../../Features/Roles/Mapper/DiscoverCureMapper";
 import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
+import PlayerCityMapper from "../../Features/Roles/Mapper/PlayerCityMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
 import type { IRole } from "../../Intefaces/IRole";
 import type { MapperType } from "../../Types/MapperType";
@@ -64,7 +65,7 @@ export class Dispatcher implements IRole {
       },
       "Move Pawn To Pawn": {
         action: new MovePawnToPawnAction(),
-        element: <EmptyMapper />,
+        element: <PlayerCityMapper />,
       },
     };
   }
