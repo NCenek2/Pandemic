@@ -3,6 +3,7 @@ import CityCardMapper from "../../Features/Roles/Mapper/CityCardMapper";
 import CityMapper from "../../Features/Roles/Mapper/CityMapper";
 import ColorMapper from "../../Features/Roles/Mapper/ColorMapper";
 import DiscoverCureMapper from "../../Features/Roles/Mapper/DiscoverCureMapper";
+import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
 import type { IRole } from "../../Intefaces/IRole";
 import type { MapperType } from "../../Types/MapperType";
@@ -12,7 +13,7 @@ import { DirectFlightAction } from "./Actions/DirectFlightAction";
 import { DiscoverCureAction } from "./Actions/DiscoverCureAction";
 import { DriveOrFerryAction } from "./Actions/DriveOrFerryAction";
 import { ShareKnowledgeAction } from "./Actions/ShareKnowledgeAction";
-import { ShuttleFlightAction } from "./Actions/ShuttleFlightAction";
+import { ShuttleFlightOperationsExpertAction } from "./Actions/ShuttleFlightOperationsExpertAction";
 import { TreatDiseaseAction } from "./Actions/TreatDiseaseAction";
 import { UseEventAction } from "./Actions/UseEventAction";
 
@@ -39,7 +40,7 @@ export class OperationsExpert implements IRole {
       },
       "Build Research Station": {
         action: new BuildResearchStationActionOperationsExpertAction(),
-        element: <CardMapper />,
+        element: <EmptyMapper />,
       },
       "Treat Disease": {
         action: new TreatDiseaseAction(),
@@ -54,7 +55,7 @@ export class OperationsExpert implements IRole {
         element: <ShareKnowledgeMapper />,
       },
       "Shuttle Flight": {
-        action: new ShuttleFlightAction(),
+        action: new ShuttleFlightOperationsExpertAction(),
         element: <CityCardMapper />,
       },
       "Use Event": {

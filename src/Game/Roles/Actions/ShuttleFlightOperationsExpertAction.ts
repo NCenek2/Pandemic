@@ -7,25 +7,23 @@ export class ShuttleFlightOperationsExpertAction implements IRoleAction {
 
   public CanExecute(gameState: IGameState): boolean {
     const currentPlayer = gameState.currentPlayer;
+    const selectedCard = gameState.selectedCard;
     const destination = gameState.selectedCity;
 
-    if (currentPlayer == null || destination == null) return false;
+    if (currentPlayer == null || destination == null || selectedCard == null)
+      return false;
 
     const condition1 = currentPlayer.currentLocation !== destination;
     const condition2 = currentPlayer.currentLocation.elements.some((element) =>
       isResearchStation(element),
     );
 
-    //// NEEDS LOGIC FOR RESEARCH STATION TO ANY CITY BY DISCARDING CARD
-
-    // Havent done in turn yet
-    const condition3 = true;
-
-    return condition1 && condition2 && condition3;
+    return condition1 && condition2;
   }
 
   public Execute(gameState: IGameState): void {
     const currentPlayer = gameState.currentPlayer!;
+    const cardToDiscard = gameState.selectedCard!;
     const destination = gameState.selectedCity!;
 
     gameState.setPlayers((prevPlayers) =>
@@ -34,6 +32,19 @@ export class ShuttleFlightOperationsExpertAction implements IRoleAction {
           player.Move(destination);
           return player;
         }
+        return player;
+      }),
+    );
+
+    // Remove the selected card
+    gameState.setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player == currentPlayer) {
+          currentPlayer.removeCard(cardToDiscard);
+          gameState.playerCardContainer.current.moveToDiscard(cardToDiscard);
+          return player;
+        }
+
         return player;
       }),
     );
