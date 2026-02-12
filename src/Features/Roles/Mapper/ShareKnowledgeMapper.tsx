@@ -65,7 +65,7 @@ const ShareKnowledgeMapper = () => {
         </Modal.Header>
         <Modal.Body>Select Players and Card To Transfer</Modal.Body>
         <Modal.Body>
-          <div className="d-flex flex-row justify-content-evenly ">
+          <div className="d-flex flex-row justify-content-evenly gap-2">
             <div className="d-flex flex-column gap-2">
               <PlayerListBox
                 players={players}
