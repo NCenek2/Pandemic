@@ -37,6 +37,19 @@ const DiscoverCureMapper = () => {
     }
   };
 
+  const getItemColor = (playerCard: IPlayerCard): string => {
+    if (selectedCards.includes(playerCard)) return "-success";
+
+    if (isCityCard(playerCard)) {
+      const cityCard = playerCard as CityCard;
+      if (cityCard.city.color === "Red") return "-danger";
+      if (cityCard.city.color === "Blue") return "-info";
+      if (cityCard.city.color === "Yellow") return "-warning";
+      if (cityCard.city.color === "Black") return "-dark";
+    }
+    return "";
+  };
+
   useEffect(() => {
     setUniqueData(selectedCards);
   }, [selectedCards]);
@@ -44,7 +57,7 @@ const DiscoverCureMapper = () => {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center">
       <Button variant="primary" className="btn-xs" onClick={handleShow}>
-        Discover Cure
+        Open
       </Button>
 
       <Modal
@@ -67,7 +80,7 @@ const DiscoverCureMapper = () => {
               <ListGroup.Item
                 key={`DiscoverCure-${card.title}`}
                 onClick={() => toggleActive(card)}
-                active={selectedCards.includes(card)}
+                className={`user-select-none list-group-item${getItemColor(card)}`}
               >
                 {card.title} (
                 {isCityCard(card) && (card as CityCard).city.color})

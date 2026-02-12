@@ -50,7 +50,7 @@ const ShareKnowledgeMapper = () => {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center">
       <Button variant="primary" className="btn-xs" onClick={handleShow}>
-        Share Knowledge
+        Open
       </Button>
 
       <Modal
