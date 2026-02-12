@@ -8,7 +8,7 @@ import useGameFlow from "../Hooks/useGameFlow";
 import type { IPlayerCard } from "../Intefaces/IPlayerCard";
 
 const DiscardCards = () => {
-  const { currentPlayer } = useGame();
+  const { currentPlayer, setPlayers } = useGame();
   const { postCardDraw } = useGameFlow();
   const [cardsToDiscard, setCardsToDiscard] = useState<IPlayerCard[]>([]);
 
@@ -16,6 +16,18 @@ const DiscardCards = () => {
     (currentPlayer?.playerCards.length ?? 0) - cardsToDiscard.length;
 
   const discard = async () => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player == currentPlayer) {
+          for (const card of cardsToDiscard) {
+            player.removeCard(card);
+          }
+          return player;
+        }
+        return player;
+      }),
+    );
+
     await postCardDraw();
   };
 
