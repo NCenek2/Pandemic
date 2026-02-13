@@ -10,14 +10,12 @@ export class DriveOrFerryAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer;
     const destination = gameState.selectedCity;
 
-
     if (currentPlayer == null || destination == null) return false;
 
     const condition1 = currentPlayer.currentLocation !== destination;
     const condition2 = currentPlayer.currentLocation.connections.some(
       (conn) => conn === destination,
     );
-
 
     return condition1 && condition2;
   }
@@ -35,5 +33,9 @@ export class DriveOrFerryAction implements IRoleAction {
         return player;
       }),
     );
+  }
+
+  Undo(gameState: IGameState): void {
+    throw new Error("Method not implemented.");
   }
 }

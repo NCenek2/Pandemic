@@ -32,4 +32,8 @@ export class MovePawnToPawnAction implements IRoleAction {
       }),
     );
   }
+
+  Undo(gameState: IGameState): void {
+    throw new Error("Method not implemented.");
+  }
 }

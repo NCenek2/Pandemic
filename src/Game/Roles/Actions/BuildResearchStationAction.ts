@@ -61,4 +61,8 @@ export class BuildResearchStationAction implements IRoleAction {
       }),
     );
   }
+
+  Undo(gameState: IGameState): void {
+    throw new Error("Method not implemented.");
+  }
 }

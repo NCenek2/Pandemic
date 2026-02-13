@@ -36,4 +36,8 @@ export class BuildResearchStationActionOperationsExpertAction implements IRoleAc
       }),
     );
   }
+
+  Undo(gameState: IGameState): void {
+    throw new Error("Method not implemented.");
+  }
 }

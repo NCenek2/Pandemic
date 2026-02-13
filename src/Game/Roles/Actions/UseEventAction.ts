@@ -20,4 +20,8 @@ export class UseEventAction implements IRoleAction {
       game;
     }
   }
+
+  Undo(gameState: IGameState): void {
+    throw new Error("Method not implemented.");
+  }
 }

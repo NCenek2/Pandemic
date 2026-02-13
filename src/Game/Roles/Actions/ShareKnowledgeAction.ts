@@ -79,4 +79,8 @@ export class ShareKnowledgeAction implements IRoleAction {
       }),
     );
   }
+
+  Undo(gameState: IGameState): void {
+    throw new Error("Method not implemented.");
+  }
 }
