@@ -31,7 +31,7 @@ const CureStatuses = ({ suffix }: CureStatusesProps) => {
           variant={getVariant(cure.color)}
           onClick={() => setSelectedColor(cure.color)}
         >
-          {cure.color} {cure.cured ? "\u2713" : "\u2717"}
+          {cure.cured ? "\u2713" : "\u2717"}
         </Button>
       ))}
     </div>
