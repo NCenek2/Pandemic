@@ -14,7 +14,7 @@ const CureStatuses = ({ suffix }: CureStatusesProps) => {
     if (color === "Red")
       return color === selectedColor ? "danger" : "outline-danger";
     if (color === "Blue")
-      return color === selectedColor ? "info" : "outline-info";
+      return color === selectedColor ? "primary" : "outline-primary";
     if (color === "Yellow")
       return color === selectedColor ? "warning" : "outline-warning";
     if (color === "Black")

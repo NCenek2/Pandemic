@@ -23,7 +23,7 @@ function PlayerListBox({
       {players.map((player, index) => (
         <ListGroup.Item
           key={`${prefix}${index}`}
-          className={`user-select-none list-group-item ${player === selectedPlayer && "active"}`}
+          className={`user-select-none list-group-item${player === selectedPlayer ? "-success" : ""}`}
           onClick={() => changeActivePlayer(player)}
         >
           {`${player.role.name} (${player.currentLocation.name})`}

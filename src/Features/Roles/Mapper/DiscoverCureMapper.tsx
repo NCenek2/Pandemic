@@ -43,7 +43,7 @@ const DiscoverCureMapper = () => {
     if (isCityCard(playerCard)) {
       const cityCard = playerCard as CityCard;
       if (cityCard.city.color === "Red") return "-danger";
-      if (cityCard.city.color === "Blue") return "-info";
+      if (cityCard.city.color === "Blue") return "-primary";
       if (cityCard.city.color === "Yellow") return "-warning";
       if (cityCard.city.color === "Black") return "-dark";
     }
