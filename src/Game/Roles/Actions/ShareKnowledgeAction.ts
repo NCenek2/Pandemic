@@ -15,6 +15,8 @@ export type ShareKnowledgeStateType = {
 export class ShareKnowledgeAction implements IRoleAction {
   public Name: string = "Share Knowledge";
 
+  private _previousState: ShareKnowledgeStateType | null = null;
+
   public CanExecute(gameState: IGameState): boolean {
     const currentPlayer = gameState.currentPlayer;
 
@@ -58,6 +60,8 @@ export class ShareKnowledgeAction implements IRoleAction {
   public Execute(gameState: IGameState): void {
     const shareKnowledgeState = gameState.uniqueData as ShareKnowledgeStateType;
 
+    this._previousState = shareKnowledgeState;
+
     const player1 = shareKnowledgeState.player1;
     const player2 = shareKnowledgeState.player2;
     const player1Card = shareKnowledgeState.player1Card!;
@@ -81,6 +85,25 @@ export class ShareKnowledgeAction implements IRoleAction {
   }
 
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    const player1 = this._previousState!.player1;
+    const player2 = this._previousState!.player2;
+    const player1Card = this._previousState!.player1Card!;
+    const player2Card = this._previousState!.player2Card!;
+
+    gameState.setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player === player1) {
+          player1.removeCard(player2Card);
+          player1.addCard(player1Card);
+          return player;
+        } else if (player === player2) {
+          player2.removeCard(player1Card);
+          player2.addCard(player2Card);
+          return player;
+        }
+
+        return player;
+      }),
+    );
   }
 }

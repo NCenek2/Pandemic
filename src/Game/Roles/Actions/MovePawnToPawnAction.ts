@@ -1,8 +1,13 @@
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
+import type { City } from "../../City";
+import type { Player } from "../../Player";
 
 export class MovePawnToPawnAction implements IRoleAction {
   public Name: string = "Move Pawn To Pawn";
+
+  private _selectedPlayer: Player | null = null;
+  private _previousLocation: City | null = null;
 
   public CanExecute(gameState: IGameState): boolean {
     const selectedPlayer = gameState.selectedPlayer;
@@ -22,6 +27,10 @@ export class MovePawnToPawnAction implements IRoleAction {
     const selectedPlayer = gameState.selectedPlayer!;
     const selectedCity = gameState.selectedCity!;
 
+    this._selectedPlayer = selectedPlayer;
+    this._previousLocation = selectedPlayer.currentLocation;
+
+    // Move Selected Player To Selected City
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {
         if (player === selectedPlayer) {
@@ -34,6 +43,15 @@ export class MovePawnToPawnAction implements IRoleAction {
   }
 
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    // Move Selected Player To Previous City
+    gameState.setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player === this._selectedPlayer) {
+          player.Move(this._previousLocation!);
+          return player;
+        }
+        return player;
+      }),
+    );
   }
 }

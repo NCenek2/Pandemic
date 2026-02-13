@@ -1,9 +1,14 @@
 import { isResearchStation } from "../../../Guards/guards";
 import type { IGameState } from "../../../Intefaces/IGameState";
+import type { IPlayerCard } from "../../../Intefaces/IPlayerCard";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
+import type { City } from "../../City";
 
 export class ShuttleFlightOperationsExpertAction implements IRoleAction {
-  public Name: string = "Shuttle Flight";
+  public Name: string = "Research to Any City";
+
+  private _previousLocation: City | null = null;
+  private _discardedCard: IPlayerCard | null = null;
 
   public CanExecute(gameState: IGameState): boolean {
     const currentPlayer = gameState.currentPlayer;
@@ -25,6 +30,9 @@ export class ShuttleFlightOperationsExpertAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer!;
     const cardToDiscard = gameState.selectedCard!;
     const destination = gameState.selectedCity!;
+
+    this._previousLocation = currentPlayer.currentLocation;
+    this._discardedCard = cardToDiscard;
 
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {
@@ -51,6 +59,23 @@ export class ShuttleFlightOperationsExpertAction implements IRoleAction {
   }
 
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    const currentPlayer = gameState.currentPlayer!;
+
+    gameState.playerCardContainer.current.removeFromDiscard(
+      this._discardedCard!,
+    );
+
+    // Move the player back to the previous location
+    gameState.setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player == currentPlayer) {
+          currentPlayer.Move(this._previousLocation!);
+          currentPlayer.addCard(this._discardedCard!);
+          return player;
+        }
+
+        return player;
+      }),
+    );
   }
 }

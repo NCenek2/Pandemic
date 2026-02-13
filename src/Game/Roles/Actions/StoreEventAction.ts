@@ -20,6 +20,9 @@ export class StoreEventAction implements IRoleAction {
   }
 
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    const game = gameState;
+    {
+      game;
+    }
   }
 }

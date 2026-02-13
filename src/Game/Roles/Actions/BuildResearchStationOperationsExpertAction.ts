@@ -3,7 +3,7 @@ import type { IResearchStation } from "../../../Intefaces/IResearchStation";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
 
 export class BuildResearchStationActionOperationsExpertAction implements IRoleAction {
-  //   private _researchStation: IResearchStation;
+  private _researchStation: IResearchStation | null = null;
   public Name: string = "Build Research Station";
 
   public CanExecute(gameState: IGameState): boolean {
@@ -35,9 +35,21 @@ export class BuildResearchStationActionOperationsExpertAction implements IRoleAc
         return city;
       }),
     );
+
+    this._researchStation = researchStation;
   }
 
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    const currentPlayer = gameState.currentPlayer!;
+
+    gameState.setCities((prevCities) =>
+      prevCities.map((city) => {
+        if (city == currentPlayer?.currentLocation) {
+          city.removeResearchStation(this._researchStation!);
+          return city;
+        }
+        return city;
+      }),
+    );
   }
 }

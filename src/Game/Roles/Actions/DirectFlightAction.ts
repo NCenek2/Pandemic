@@ -2,10 +2,11 @@ import { isCityCard } from "../../../Guards/guards";
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
 import type { CityCard } from "../../Cards/CityCard";
+import type { City } from "../../City";
 
 export class DirectFlightAction implements IRoleAction {
-  // private CityCard _removedCityCard;
-  // private City _previousCity;
+  private _removedCityCard: CityCard | null = null;
+  private _previousCity: City | null = null;
 
   public Name: string = "Direct Flight";
 
@@ -28,6 +29,8 @@ export class DirectFlightAction implements IRoleAction {
   public Execute(gameState: IGameState): void {
     const currentPlayer = gameState.currentPlayer!;
     const destination = gameState.selectedCity!;
+
+    this._previousCity = currentPlayer.currentLocation;
 
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {
@@ -56,9 +59,29 @@ export class DirectFlightAction implements IRoleAction {
         return player;
       }),
     );
+
+    this._removedCityCard = cityCard;
   }
-  
+
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    const currentPlayer = gameState.currentPlayer!;
+
+    // Add Back Player Card
+    gameState.playerCardContainer.current.removeFromDiscard(
+      this._removedCityCard!,
+    );
+
+    // Give Back Card and Mmove Player Back to Previous City
+    gameState.setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player == currentPlayer) {
+          currentPlayer.Move(this._previousCity!);
+          currentPlayer.addCard(this._removedCityCard!);
+          return player;
+        }
+
+        return player;
+      }),
+    );
   }
 }

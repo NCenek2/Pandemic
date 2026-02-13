@@ -1,8 +1,9 @@
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
+import type { City } from "../../City";
 
 export class DriveOrFerryAction implements IRoleAction {
-  // private City _previousLocation;
+  private _previousLocation: City | null = null;
 
   public Name: string = "Drive or Ferry";
 
@@ -24,6 +25,9 @@ export class DriveOrFerryAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer!;
     const destination = gameState.selectedCity!;
 
+    this._previousLocation = currentPlayer.currentLocation;
+
+    // Move To Destination
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {
         if (player == currentPlayer) {
@@ -36,6 +40,19 @@ export class DriveOrFerryAction implements IRoleAction {
   }
 
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    const currentPlayer = gameState.currentPlayer!;
+
+    this._previousLocation = currentPlayer.currentLocation;
+
+    // Move To Previous Location
+    gameState.setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player == currentPlayer) {
+          player.Move(this._previousLocation!);
+          return player;
+        }
+        return player;
+      }),
+    );
   }
 }

@@ -1,9 +1,12 @@
 import { isResearchStation } from "../../../Guards/guards";
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
+import type { City } from "../../City";
 
 export class ShuttleFlightAction implements IRoleAction {
   public Name: string = "Shuttle Flight";
+
+  private _previousLocation: City | null = null;
 
   public CanExecute(gameState: IGameState): boolean {
     const currentPlayer = gameState.currentPlayer;
@@ -26,6 +29,8 @@ export class ShuttleFlightAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer!;
     const destination = gameState.selectedCity!;
 
+    this._previousLocation = currentPlayer.currentLocation;
+
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {
         if (player == currentPlayer) {
@@ -38,6 +43,16 @@ export class ShuttleFlightAction implements IRoleAction {
   }
 
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    const currentPlayer = gameState.currentPlayer!;
+
+    gameState.setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player == currentPlayer) {
+          player.Move(this._previousLocation!);
+          return player;
+        }
+        return player;
+      }),
+    );
   }
 }

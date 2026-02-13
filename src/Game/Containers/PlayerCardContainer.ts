@@ -57,6 +57,18 @@ export class PlayerCardContainer {
     return true;
   }
 
+  public removeFromDiscard(playerCard: IPlayerCard): boolean {
+    const filteredCards = this._discardedPlayerCards.filter(
+      (dpc) => dpc !== playerCard,
+    );
+
+    const removed = filteredCards.length != this._discardedPlayerCards.length;
+
+    this._discardedPlayerCards = filteredCards;
+
+    return removed;
+  }
+
   public shuffleCards(): void {
     for (let j = 0; j < 5; j++) {
       for (let i = 0; i < this._playerCards.length; i++) {

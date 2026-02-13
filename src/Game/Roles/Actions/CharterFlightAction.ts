@@ -6,7 +6,8 @@ import type { CityCard } from "../../Cards/CityCard";
 export class CharterFlightAction implements IRoleAction {
   public Name: string = "Charter Flight";
 
-  //   private _removedCityCard: CityCard;
+  private _removedCityCard: CityCard | null = null;
+
   public CanExecute(gameState: IGameState): boolean {
     const currentPlayer = gameState.currentPlayer;
     const destination = gameState.selectedCity;
@@ -56,9 +57,28 @@ export class CharterFlightAction implements IRoleAction {
         return player;
       }),
     );
+
+    this._removedCityCard = cityCard;
   }
 
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    const currentPlayer = gameState.currentPlayer!;
+
+    // Add Back Player Card and Move To Cards Previous Location
+    gameState.playerCardContainer.current.removeFromDiscard(
+      this._removedCityCard!,
+    );
+
+    gameState.setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player == currentPlayer) {
+          currentPlayer.Move(this._removedCityCard!.city);
+          currentPlayer.addCard(this._removedCityCard!);
+          return player;
+        }
+
+        return player;
+      }),
+    );
   }
 }

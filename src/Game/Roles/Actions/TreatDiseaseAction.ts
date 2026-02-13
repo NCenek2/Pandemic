@@ -3,9 +3,12 @@ import { isCube } from "../../../Guards/guards";
 import type { ICube } from "../../../Intefaces/ICube";
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
+import type { Cube } from "../../Elements/Cube";
 
 export class TreatDiseaseAction implements IRoleAction {
   public Name: string = "Treat Disease";
+
+  private _curedDiseaseCube: Cube | null = null;
 
   public CanExecute(gameState: IGameState): boolean {
     {
@@ -41,11 +44,14 @@ export class TreatDiseaseAction implements IRoleAction {
       (element) => isCube(element) && element.color === color,
     ) as ICube;
 
+    this._curedDiseaseCube = cube;
+
     gameState.setCities((prevCities) =>
       prevCities.map((city) => {
-        if (city == currentPlayer?.currentLocation && cube != null) {
+        if (city == currentPlayer?.currentLocation) {
           city.removeCube(cube);
           gameState.cubeContainer.current.addCube(cube);
+          this._curedDiseaseCube = cube;
           return city;
         }
         return city;
@@ -54,6 +60,17 @@ export class TreatDiseaseAction implements IRoleAction {
   }
 
   Undo(gameState: IGameState): void {
-    throw new Error("Method not implemented.");
+    const currentPlayer = gameState.currentPlayer;
+
+    gameState.setCities((prevCities) =>
+      prevCities.map((city) => {
+        if (city == currentPlayer?.currentLocation) {
+          city.placeCube(this._curedDiseaseCube!);
+          gameState.cubeContainer.current.removeCube(this._curedDiseaseCube!);
+          return city;
+        }
+        return city;
+      }),
+    );
   }
 }
