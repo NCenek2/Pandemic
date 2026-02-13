@@ -13,6 +13,7 @@ import { DirectFlightAction } from "./Actions/DirectFlightAction";
 import { DiscoverCureAction } from "./Actions/DiscoverCureAction";
 import { DriveOrFerryAction } from "./Actions/DriveOrFerryAction";
 import { ShareKnowledgeAction } from "./Actions/ShareKnowledgeAction";
+import { ShuttleFlightAction } from "./Actions/ShuttleFlightAction";
 import { ShuttleFlightOperationsExpertAction } from "./Actions/ShuttleFlightOperationsExpertAction";
 import { TreatDiseaseAction } from "./Actions/TreatDiseaseAction";
 import { UseEventAction } from "./Actions/UseEventAction";
@@ -55,6 +56,10 @@ export class OperationsExpert implements IRole {
         element: <ShareKnowledgeMapper />,
       },
       "Shuttle Flight": {
+        action: new ShuttleFlightAction(),
+        element: <CityMapper />,
+      },
+      "Research to Any City": {
         action: new ShuttleFlightOperationsExpertAction(),
         element: <CityCardMapper />,
       },

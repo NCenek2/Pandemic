@@ -11,6 +11,7 @@ export type ActionsType =
   | "Direct Flight"
   | "Charter Flight"
   | "Shuttle Flight"
+  | "Research to Any City"
   | "Build Research Station"
   | "Treat Disease"
   | "Share Knowledge"
