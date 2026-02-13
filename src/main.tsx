@@ -7,7 +7,11 @@ import "./App.css";
 import App from "./App.tsx";
 import { SetupProvider } from "./Contexts/SetupContext.tsx";
 import Layout from "./Features/Layout.tsx";
-import { LOST_GAME_URL, WON_GAME_URL } from "./Game/Constants/Constants.ts";
+import {
+  BASENAME,
+  LOST_GAME_URL,
+  WON_GAME_URL,
+} from "./Game/Constants/Constants.ts";
 import "./index.css";
 import EndGame from "./Pages/EndGame.tsx";
 import GameWon from "./Pages/GameWon.tsx";
@@ -15,7 +19,7 @@ import StartupPage from "./Pages/StartupPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <SetupProvider>
-    <BrowserRouter basename="/Pandemic">
+    <BrowserRouter basename={BASENAME}>
       <Routes>
         <Route path="/" Component={StartupPage} />
         <Route path="/game" element={<Layout />}>
