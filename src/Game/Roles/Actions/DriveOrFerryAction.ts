@@ -42,8 +42,6 @@ export class DriveOrFerryAction implements IRoleAction {
   Undo(gameState: IGameState): void {
     const currentPlayer = gameState.currentPlayer!;
 
-    this._previousLocation = currentPlayer.currentLocation;
-
     // Move To Previous Location
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {

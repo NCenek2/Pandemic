@@ -29,6 +29,8 @@ const usePlayerContext = () => {
   const [selectedAction, setSelectedAction] = useState<MapperItemType | null>(
     null,
   );
+
+  const prevAction = useRef<MapperItemType | null>(null);
   const [uniqueData, setUniqueData] = useState<any>(null);
 
   const turnCount = useRef(0);
@@ -63,10 +65,41 @@ const usePlayerContext = () => {
     if (turnCount.current % TURNS_PER_ROUND === 0) {
       endTurn();
       gameFlow.endTurn();
+    } else {
+      prevAction.current = selectedAction;
     }
   };
 
+  const undoTurn = () => {
+    if (prevAction.current == null) return;
+
+    turnCount.current -= 1;
+    prevAction.current.action.Undo({
+      ...game,
+      executeAction,
+      isValidAction,
+      setIsValidAction,
+      selectedAction,
+      setSelectedAction,
+      selectedPlayer,
+      selectedCity,
+      selectedCard,
+      selectedColor,
+      setSelectedPlayer,
+      setSelectedCity,
+      setSelectedColor,
+      setSelectedCard,
+      uniqueData,
+      setUniqueData,
+    });
+
+    prevAction.current = null;
+
+    setHasChanged((prev) => !prev);
+  };
+
   const endTurn = () => {
+    prevAction.current = null;
     setSelectedCard(null);
     setSelectedAction(null);
     setUniqueData(null);
@@ -98,6 +131,17 @@ const usePlayerContext = () => {
 
     setIsValidAction(validState);
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "z") {
+        undoTurn();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, []);
 
   useEffect(() => {
     checkValidAction();

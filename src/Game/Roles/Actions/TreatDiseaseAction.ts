@@ -60,11 +60,11 @@ export class TreatDiseaseAction implements IRoleAction {
   }
 
   Undo(gameState: IGameState): void {
-    const currentPlayer = gameState.currentPlayer;
+    const currentPlayer = gameState.currentPlayer!;
 
     gameState.setCities((prevCities) =>
       prevCities.map((city) => {
-        if (city == currentPlayer?.currentLocation) {
+        if (city == currentPlayer.currentLocation) {
           city.placeCube(this._curedDiseaseCube!);
           gameState.cubeContainer.current.removeCube(this._curedDiseaseCube!);
           return city;
