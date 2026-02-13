@@ -68,7 +68,7 @@ const useGameFlowContext = () => {
     });
 
     // Infect
-    const nextCard = infectionCardContainer.current.draw();
+    const nextCard = infectionCardContainer.current.drawFromBottom();
     if (!nextCard) return gameOver();
 
     setPosition({
@@ -81,11 +81,6 @@ const useGameFlowContext = () => {
     for (let i = 0; i < 3; i++) {
       const cube = cubeContainer.current.getCube(nextCard.city.color);
       if (!cube) return gameOver();
-
-      if (nextCard.city.GetCubeCount() >= OUTBREAK_CUBE_THRESHOLD) {
-        await outbreak(nextCard.city, new Set());
-        continue;
-      }
 
       cubeContainer.current.removeCube(cube!);
 

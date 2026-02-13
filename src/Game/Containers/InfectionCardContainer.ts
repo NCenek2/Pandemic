@@ -63,6 +63,15 @@ export class InfectionCardContainer {
     return frontCard;
   }
 
+  public drawFromBottom(): InfectionCard | null {
+    if (this._infectionCards.length === 0) return null;
+
+    const backCard = this._infectionCards.pop() as InfectionCard;
+    this.moveToDiscard(backCard);
+
+    return backCard;
+  }
+
   private moveToDiscard(infectionCard: InfectionCard): boolean {
     if (
       this._discardedInfectionCards.find((dic) => dic === infectionCard) !==
