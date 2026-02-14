@@ -5,7 +5,7 @@ import ColorMapper from "../../Features/Roles/Mapper/ColorMapper";
 import DiscoverCureMapper from "../../Features/Roles/Mapper/DiscoverCureMapper";
 import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
-import type { IRole } from "../../Intefaces/IRole";
+import type { IRole, RoleName } from "../../Intefaces/IRole";
 import type { MapperType } from "../../Types/MapperType";
 import { BuildResearchStationActionOperationsExpertAction } from "./Actions/BuildResearchStationOperationsExpertAction";
 import { CharterFlightAction } from "./Actions/CharterFlightAction";
@@ -19,7 +19,7 @@ import { TreatDiseaseAction } from "./Actions/TreatDiseaseAction";
 import { UseEventAction } from "./Actions/UseEventAction";
 
 export class OperationsExpert implements IRole {
-  public name: string = "Operations Expert";
+  public name: RoleName = "Operations Expert";
   private readonly _actions: MapperType;
 
   public get actions(): MapperType {

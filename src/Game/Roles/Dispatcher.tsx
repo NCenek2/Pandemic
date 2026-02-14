@@ -5,7 +5,7 @@ import DiscoverCureMapper from "../../Features/Roles/Mapper/DiscoverCureMapper";
 import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
 import PlayerCityMapper from "../../Features/Roles/Mapper/PlayerCityMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
-import type { IRole } from "../../Intefaces/IRole";
+import type { IRole, RoleName } from "../../Intefaces/IRole";
 import type { MapperType } from "../../Types/MapperType";
 import { BuildResearchStationAction } from "./Actions/BuildResearchStationAction";
 import { CharterFlightAction } from "./Actions/CharterFlightAction";
@@ -19,7 +19,7 @@ import { TreatDiseaseAction } from "./Actions/TreatDiseaseAction";
 import { UseEventAction } from "./Actions/UseEventAction";
 
 export class Dispatcher implements IRole {
-  public name: string = "Dispatcher";
+  public name: RoleName = "Dispatcher";
   private readonly _actions: MapperType;
 
   public get actions(): MapperType {

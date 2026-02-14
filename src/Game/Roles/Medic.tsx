@@ -3,7 +3,7 @@ import CityMapper from "../../Features/Roles/Mapper/CityMapper";
 import DiscoverCureMapper from "../../Features/Roles/Mapper/DiscoverCureMapper";
 import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
-import type { IRole } from "../../Intefaces/IRole";
+import type { IRole, RoleName } from "../../Intefaces/IRole";
 import type { MapperType } from "../../Types/MapperType";
 import { BuildResearchStationAction } from "./Actions/BuildResearchStationAction";
 import { CharterFlightAction } from "./Actions/CharterFlightAction";
@@ -16,7 +16,7 @@ import { TreatDiseaseActionMedicAction } from "./Actions/TreatDiseaseMedicAction
 import { UseEventAction } from "./Actions/UseEventAction";
 
 export class Medic implements IRole {
-  public name: string = "Medic";
+  public name: RoleName = "Medic";
   private readonly _actions: MapperType;
 
   public get actions(): MapperType {

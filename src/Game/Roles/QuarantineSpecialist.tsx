@@ -4,7 +4,7 @@ import ColorMapper from "../../Features/Roles/Mapper/ColorMapper";
 import DiscoverCureMapper from "../../Features/Roles/Mapper/DiscoverCureMapper";
 import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
-import type { IRole } from "../../Intefaces/IRole";
+import type { IRole, RoleName } from "../../Intefaces/IRole";
 import type { MapperType } from "../../Types/MapperType";
 import { BuildResearchStationAction } from "./Actions/BuildResearchStationAction";
 import { CharterFlightAction } from "./Actions/CharterFlightAction";
@@ -17,7 +17,7 @@ import { TreatDiseaseAction } from "./Actions/TreatDiseaseAction";
 import { UseEventAction } from "./Actions/UseEventAction";
 
 export class QuarantineSpecialist implements IRole {
-  public name: string = "Quarantine Specialist";
+  public name: RoleName = "Quarantine Specialist";
   private readonly _actions: MapperType;
 
   public get actions(): MapperType {

@@ -12,7 +12,7 @@ import type { ResearchStationContainer } from "../Containers/ResearchStationCont
 import type { Cure } from "../Cure";
 import { Game } from "../Game";
 import { Player } from "../Player";
-import { ContinegencyPlanner } from "../Roles/ContinegencyPlanner";
+import { ContingencyPlanner } from "../Roles/ContingencyPlanner";
 import { Dispatcher } from "../Roles/Dispatcher";
 import { Medic } from "../Roles/Medic";
 import { OperationsExpert } from "../Roles/OperationsExpert";
@@ -51,7 +51,7 @@ export class GameHelper {
 
     // Random Role Select
     const roles: IRole[] = [
-      new ContinegencyPlanner(),
+      new ContingencyPlanner(),
       new Dispatcher(),
       new Medic(),
       new OperationsExpert(),
