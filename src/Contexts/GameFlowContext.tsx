@@ -1,5 +1,5 @@
 import { createContext, useRef, useState, type ReactElement } from "react";
-import type { City } from "../Game/City";
+import { City } from "../Game/City";
 import {
   CUBE_ZOOM,
   DEFAULT_ZOOM,
@@ -34,7 +34,7 @@ const useGameFlowContext = () => {
 
   const [mustDiscardCards, setMustDiscardCards] = useState(false);
 
-  const infectCities = async () => {
+  const infectCities = async (disregardedCities: Set<string>) => {
     setAlert("Infecting Cities...");
 
     const rate = infectionMarker.infectionRate;
@@ -42,12 +42,18 @@ const useGameFlowContext = () => {
     for (let i = 0; i < rate; i++) {
       const nextCard = infectionCardContainer.current.draw();
       if (!nextCard) return gameOver();
+
+      if (disregardedCities.has(nextCard.city.name)) {
+        setAlert(`QS prevents infection in ${nextCard.city.name}`, "success");
+        continue;
+      }
+
       const cube = cubeContainer.current.getCube(nextCard.city.color);
       if (!cube) return gameOver();
 
       // Check For Outbreak
       if (nextCard.city.GetCubeCount() >= OUTBREAK_CUBE_THRESHOLD) {
-        await outbreak(nextCard.city, new Set());
+        await outbreak(nextCard.city, new Set(), disregardedCities);
         continue;
       }
 
@@ -71,36 +77,56 @@ const useGameFlowContext = () => {
     const nextCard = infectionCardContainer.current.drawFromBottom();
     if (!nextCard) return gameOver();
 
-    setPosition({
-      coordinates: nextCard.city.coordinates,
-      zoom: CUBE_ZOOM,
-    });
+    const disregardCities = getDisregardedCities();
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (!disregardCities.has(nextCard.city.name)) {
+      setPosition({
+        coordinates: nextCard.city.coordinates,
+        zoom: CUBE_ZOOM,
+      });
 
-    for (let i = 0; i < 3; i++) {
-      const cube = cubeContainer.current.getCube(nextCard.city.color);
-      if (!cube) return gameOver();
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      cubeContainer.current.removeCube(cube!);
+      for (let i = 0; i < 3; i++) {
+        const cube = cubeContainer.current.getCube(nextCard.city.color);
+        if (!cube) return gameOver();
 
-      setCities((prevCities) =>
-        prevCities.map((city) => {
-          if (city.name === nextCard.city.name) {
-            city.placeCube(cube);
+        cubeContainer.current.removeCube(cube!);
+
+        setCities((prevCities) =>
+          prevCities.map((city) => {
+            if (city.name === nextCard.city.name) {
+              city.placeCube(cube);
+              return city;
+            }
             return city;
-          }
-          return city;
-        }),
-      );
+          }),
+        );
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+    } else {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setAlert(`QS prevents epidemic in ${nextCard.city.name}`, "success");
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Intensify
     infectionCardContainer.current.intensify();
+  };
+
+  const getDisregardedCities = (): Set<string> => {
+    const quarantineSpecialist = players.find(
+      (player) => player.role.name === "Quarantine Specialist",
+    );
+
+    const disregardCities = new Set<string>();
+    if (quarantineSpecialist) {
+      disregardCities.add(quarantineSpecialist.currentLocation.name);
+      for (const connectingCity of quarantineSpecialist.currentLocation
+        .connections)
+        disregardCities.add(connectingCity.name);
+    }
+    return disregardCities;
   };
 
   const drawCards = async (): Promise<void> => {
@@ -135,7 +161,13 @@ const useGameFlowContext = () => {
   const outbreak = async (
     outbrokenCity: City,
     citiesWithOutbreaks: Set<string>,
+    disregardCities: Set<string>,
   ) => {
+    if (disregardCities.has(outbrokenCity.name)) {
+      setAlert(`QS prevents outbreak in ${outbrokenCity.name}`, "success");
+      return;
+    }
+
     setAlert(`Outbreak in ${outbrokenCity.name}!`);
 
     if (citiesWithOutbreaks.has(outbrokenCity.name)) {
@@ -161,7 +193,7 @@ const useGameFlowContext = () => {
 
         // Check for chain outbreak
         if (connectingCity.GetCubeCount() >= OUTBREAK_CUBE_THRESHOLD) {
-          await outbreak(connectingCity, citiesWithOutbreaks);
+          await outbreak(connectingCity, citiesWithOutbreaks, disregardCities);
           continue;
         }
 
@@ -222,7 +254,8 @@ const useGameFlowContext = () => {
     const nextIndex = (currentIndex + 1) % playerCount;
     const nextPlayer = players[nextIndex];
 
-    await infectCities();
+    const disregardCities = getDisregardedCities();
+    await infectCities(disregardCities);
 
     setPosition({
       coordinates: nextPlayer.currentLocation.coordinates,
