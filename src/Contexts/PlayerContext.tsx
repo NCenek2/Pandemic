@@ -30,7 +30,9 @@ const usePlayerContext = () => {
     null,
   );
 
-  const prevAction = useRef<MapperItemType | null>(null);
+  const [previousAction, setPreviousAction] = useState<MapperItemType | null>(
+    null,
+  );
   const [uniqueData, setUniqueData] = useState<any>(null);
 
   const turnCount = useRef(0);
@@ -66,15 +68,15 @@ const usePlayerContext = () => {
       endTurn();
       gameFlow.endTurn();
     } else {
-      prevAction.current = selectedAction;
+      setPreviousAction(selectedAction);
     }
   };
 
   const undoTurn = () => {
-    if (prevAction.current == null) return;
+    if (previousAction == null) return;
 
     turnCount.current -= 1;
-    prevAction.current.action.Undo({
+    previousAction.action.Undo({
       ...game,
       executeAction,
       isValidAction,
@@ -93,13 +95,11 @@ const usePlayerContext = () => {
       setUniqueData,
     });
 
-    prevAction.current = null;
-
-    setHasChanged((prev) => !prev);
+    setPreviousAction(null);
   };
 
   const endTurn = () => {
-    prevAction.current = null;
+    setPreviousAction(null);
     setSelectedCard(null);
     setSelectedAction(null);
     setUniqueData(null);
@@ -141,7 +141,7 @@ const usePlayerContext = () => {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, []);
+  }, [previousAction]);
 
   useEffect(() => {
     checkValidAction();
@@ -151,6 +151,7 @@ const usePlayerContext = () => {
     selectedCard,
     selectedColor,
     selectedAction,
+    previousAction,
     uniqueData,
     hasChanged,
   ]);
