@@ -8,7 +8,7 @@ export class InfectionMarker {
   }
 
   public increaseRate(): void {
-    if (this.infectionRate > 2) {
+    if (this.infectionMoveCount >= 1) {
       this.infectionMoveCount = 0;
       this.infectionRate++;
       return;
