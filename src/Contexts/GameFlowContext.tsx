@@ -231,7 +231,11 @@ const useGameFlowContext = () => {
   };
 
   const endTurn = async () => {
-    currentCardCount.current = currentPlayer!.playerCards.length;
+    setCurrentPlayer((cp) => {
+      currentCardCount.current = cp!.playerCards.length;
+      return cp;
+    });
+
     await drawCards();
 
     // Check Here
