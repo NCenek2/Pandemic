@@ -1,6 +1,7 @@
 import { createContext, useState, type ReactElement } from "react";
 import { Difficulty } from "../Enums/Difficulty";
 import { PlayerCount } from "../Enums/PlayerCount";
+import { Game } from "../Game/Game";
 import type { ChildrenType } from "../Types/ChildrenType";
 
 export type SetupContext = {
@@ -9,7 +10,7 @@ export type SetupContext = {
 };
 
 const initState: SetupContext = {
-  playerCount: PlayerCount.One,
+  playerCount: PlayerCount.Two,
   difficulty: Difficulty.Easy,
 };
 
@@ -17,11 +18,21 @@ const useSetupContext = (initialState: SetupContext) => {
   const [difficulty, setDifficulty] = useState(initialState.difficulty);
   const [playerCount, setPlayerCount] = useState(initialState.playerCount);
 
+  const updateDifficulty = (difficulty: Difficulty) => {
+    Game.instance.setDifficulty(difficulty);
+    setDifficulty(difficulty);
+  };
+
+  const updatePlayerCount = (playerCount: PlayerCount) => {
+    Game.instance.setPlayerCount(playerCount);
+    setPlayerCount(playerCount);
+  };
+
   return {
     difficulty,
-    setDifficulty,
+    updateDifficulty,
     playerCount,
-    setPlayerCount,
+    updatePlayerCount,
   };
 };
 
@@ -30,8 +41,8 @@ export type UseSetupContextType = ReturnType<typeof useSetupContext>;
 const initContextState: UseSetupContextType = {
   difficulty: initState.difficulty,
   playerCount: initState.playerCount,
-  setDifficulty: () => {},
-  setPlayerCount: () => {},
+  updateDifficulty: () => {},
+  updatePlayerCount: () => {},
 };
 
 export const SetupContext =

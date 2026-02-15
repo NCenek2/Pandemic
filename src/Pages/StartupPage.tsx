@@ -6,7 +6,7 @@ import { PlayerCount } from "../Enums/PlayerCount";
 import useSetup from "../Hooks/useSetup";
 
 const StartupPage = () => {
-  const { setPlayerCount, setDifficulty } = useSetup();
+  const { updatePlayerCount, updateDifficulty } = useSetup();
 
   return (
     <div className="d-flex flex-column gap-3 justify-content-center h-100 align-items-center">
@@ -16,10 +16,13 @@ const StartupPage = () => {
           <h2>Choose Difficulty</h2>
           <ListBox<Difficulty>
             prefix="difficulty_"
-            items={Object.keys(Difficulty).map(
+            displayItems={Object.keys(Difficulty).map(
               (k) => k as unknown as Difficulty,
             )}
-            setState={setDifficulty}
+            items={Object.values(Difficulty).map(
+              (k) => k as unknown as Difficulty,
+            )}
+            onChange={updateDifficulty}
           />
         </Card>
 
@@ -27,10 +30,13 @@ const StartupPage = () => {
           <h2>Choose Player Count</h2>
           <ListBox<PlayerCount>
             prefix="count_"
-            items={Object.keys(PlayerCount).map(
+            displayItems={Object.keys(PlayerCount).map(
               (k) => k as unknown as PlayerCount,
             )}
-            setState={setPlayerCount}
+            items={Object.values(PlayerCount).map(
+              (k) => k as unknown as PlayerCount,
+            )}
+            onChange={updatePlayerCount}
           />
         </Card>
       </div>

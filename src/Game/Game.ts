@@ -35,7 +35,7 @@ export class Game {
   public readonly cures: Cure[];
 
   public difficulty: Difficulty = Difficulty.Easy;
-  public playerCount: PlayerCount = PlayerCount.One;
+  public playerCount: PlayerCount = PlayerCount.Two;
 
   public setDifficulty(difficulty: Difficulty): void {
     this.difficulty = difficulty;

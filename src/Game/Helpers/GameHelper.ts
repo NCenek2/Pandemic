@@ -1,4 +1,3 @@
-import { PlayerCount } from "../../Enums/PlayerCount";
 import { isCube, isResearchStation } from "../../Guards/guards";
 import type { ICube } from "../../Intefaces/ICube";
 import type { IPlayerCard } from "../../Intefaces/IPlayerCard";
@@ -23,28 +22,10 @@ import { Scientist } from "../Roles/Scientist";
 export class GameHelper {
   public setup(): void {
     const game = Game.instance;
-    let playerCount = 1;
-
-    switch (game.playerCount) {
-      case PlayerCount.One:
-        playerCount = 1;
-        break;
-      case PlayerCount.Two:
-        playerCount = 2;
-        break;
-      case PlayerCount.Three:
-        playerCount = 3;
-        break;
-      case PlayerCount.Four:
-        playerCount = 4;
-        break;
-    }
 
     let difficulty = game.difficulty;
+    let playerCount = game.playerCount;
 
-    // Fuck It and Just Override Until we know whats going on
-    playerCount = 2;
-    difficulty = 4;
     console.log(playerCount, difficulty, "In GameHelper ");
 
     const cardsPerPlayer = -playerCount + 6;
