@@ -9,7 +9,7 @@ import { BuildResearchStationAction } from "./Actions/BuildResearchStationAction
 import { CharterFlightAction } from "./Actions/CharterFlightAction";
 import { DirectFlightAction } from "./Actions/DirectFlightAction";
 import { DiscoverCureAction } from "./Actions/DiscoverCureAction";
-import { DriveOrFerryAction } from "./Actions/DriveOrFerryAction";
+import { DriveOrFerryMedicAction } from "./Actions/DriveOrFerryActionMedicAction";
 import { ShareKnowledgeAction } from "./Actions/ShareKnowledgeAction";
 import { ShuttleFlightAction } from "./Actions/ShuttleFlightAction";
 import { TreatDiseaseActionMedicAction } from "./Actions/TreatDiseaseMedicAction";
@@ -25,7 +25,7 @@ export class Medic implements IRole {
   constructor() {
     this._actions = {
       "Drive/Ferry": {
-        action: new DriveOrFerryAction(),
+        action: new DriveOrFerryMedicAction(),
         element: <CityMapper />,
       },
       "Direct Flight": {

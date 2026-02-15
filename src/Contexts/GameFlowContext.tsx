@@ -6,6 +6,7 @@ import {
   MAX_ALLOWABLE_CARDS,
   OUTBREAK_CUBE_THRESHOLD,
 } from "../Game/Constants/Constants";
+import type { Cure } from "../Game/Cure";
 import type { Cube } from "../Game/Elements/Cube";
 import { isEpidemicCard } from "../Guards/guards";
 import { useAlert } from "../Hooks/useAlert";
@@ -30,6 +31,7 @@ const useGameFlowContext = () => {
     setCurrentPlayer,
     setOutbreakMarker,
     setGameOver,
+    cures,
   } = useGame();
 
   const [mustDiscardCards, setMustDiscardCards] = useState(false);
@@ -44,7 +46,7 @@ const useGameFlowContext = () => {
       if (!nextCard) return gameOver();
 
       if (disregardedCities.has(nextCard.city.name)) {
-        setAlert(`QS prevents infection in ${nextCard.city.name}`, "success");
+        setAlert(`Infection prevented in ${nextCard.city.name}`, "success");
         continue;
       }
 
@@ -107,7 +109,7 @@ const useGameFlowContext = () => {
       }
     } else {
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      setAlert(`QS prevents epidemic in ${nextCard.city.name}`, "success");
+      setAlert(`Epidemic evaded in ${nextCard.city.name}`, "success");
     }
 
     // Intensify
@@ -119,12 +121,25 @@ const useGameFlowContext = () => {
       (player) => player.role.name === "Quarantine Specialist",
     );
 
+    const medic = players.find((player) => player.role.name === "Medic");
+
     const disregardCities = new Set<string>();
     if (quarantineSpecialist) {
       disregardCities.add(quarantineSpecialist.currentLocation.name);
       for (const connectingCity of quarantineSpecialist.currentLocation
         .connections)
         disregardCities.add(connectingCity.name);
+    }
+
+    if (medic) {
+      // Medic also disregards cities with cured diseases
+      const medicLocationCureColor = cures.find(
+        (cure) => cure.color === medic.currentLocation.color,
+      ) as Cure;
+
+      if (medicLocationCureColor.cured) {
+        disregardCities.add(medic.currentLocation.name);
+      }
     }
     return disregardCities;
   };
@@ -164,7 +179,7 @@ const useGameFlowContext = () => {
     disregardCities: Set<string>,
   ) => {
     if (disregardCities.has(outbrokenCity.name)) {
-      setAlert(`QS prevents outbreak in ${outbrokenCity.name}`, "success");
+      setAlert(`Outbreak evaded in ${outbrokenCity.name}`, "success");
       return;
     }
 
