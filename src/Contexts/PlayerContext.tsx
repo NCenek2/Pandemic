@@ -60,13 +60,13 @@ const usePlayerContext = () => {
     resetPlayer();
   };
 
-  const resetPlayer = () => {
+  const resetPlayer = async () => {
     setHasChanged((prev) => !prev);
     turnCount.current += 1;
 
     if (turnCount.current % TURNS_PER_ROUND === 0) {
       endTurn();
-      gameFlow.endTurn();
+      await gameFlow.endTurn();
     } else {
       setPreviousAction(selectedAction);
     }

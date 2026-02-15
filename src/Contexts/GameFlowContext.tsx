@@ -43,7 +43,10 @@ const useGameFlowContext = () => {
 
     for (let i = 0; i < rate; i++) {
       const nextCard = infectionCardContainer.current.draw();
-      if (!nextCard) return gameOver();
+      if (!nextCard) {
+        await gameOver("No more infection cards!");
+        return;
+      }
 
       if (disregardedCities.has(nextCard.city.name)) {
         setAlert(`Infection prevented in ${nextCard.city.name}`, "success");
@@ -51,7 +54,10 @@ const useGameFlowContext = () => {
       }
 
       const cube = cubeContainer.current.getCube(nextCard.city.color);
-      if (!cube) return gameOver();
+      if (!cube) {
+        await gameOver("No more cubes of that color!");
+        return;
+      }
 
       // Check For Outbreak
       if (nextCard.city.GetCubeCount() >= OUTBREAK_CUBE_THRESHOLD) {
@@ -77,7 +83,10 @@ const useGameFlowContext = () => {
 
     // Infect
     const nextCard = infectionCardContainer.current.drawFromBottom();
-    if (!nextCard) return gameOver();
+    if (!nextCard) {
+      await gameOver("No more infection cards!");
+      return;
+    }
 
     const disregardCities = getDisregardedCities();
 
@@ -91,7 +100,10 @@ const useGameFlowContext = () => {
 
       for (let i = 0; i < 3; i++) {
         const cube = cubeContainer.current.getCube(nextCard.city.color);
-        if (!cube) return gameOver();
+        if (!cube) {
+          await gameOver("No more cubes of that color!");
+          return;
+        }
 
         cubeContainer.current.removeCube(cube!);
 
@@ -148,7 +160,8 @@ const useGameFlowContext = () => {
     for (let i = 0; i < 2; i++) {
       const playerCard = playerCardContainer.current.draw();
       if (!playerCard) {
-        return gameOver();
+        await gameOver("No more player cards!");
+        return;
       }
 
       if (isEpidemicCard(playerCard)) {
@@ -160,7 +173,6 @@ const useGameFlowContext = () => {
         prevPlayers.map((player) => {
           if (player === currentPlayer) {
             player.addCard(playerCard);
-            currentCardCount.current = player.playerCards.length;
             return player;
           }
           return player;
@@ -169,7 +181,9 @@ const useGameFlowContext = () => {
     }
   };
 
-  const gameOver = () => {
+  const gameOver = async (message: string) => {
+    setAlert(message);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     setGameOver(true);
   };
 
@@ -187,7 +201,10 @@ const useGameFlowContext = () => {
 
     if (citiesWithOutbreaks.has(outbrokenCity.name)) {
       const cube = cubeContainer.current.getCube(outbrokenCity.color);
-      if (!cube) return gameOver();
+      if (!cube) {
+        await gameOver("No more cubes of that color!");
+        return;
+      }
 
       cubeContainer.current.removeCube(cube!);
 
@@ -204,7 +221,10 @@ const useGameFlowContext = () => {
 
       for (const connectingCity of outbrokenCity.connections) {
         const cube = cubeContainer.current.getCube(connectingCity.color);
-        if (!cube) return gameOver();
+        if (!cube) {
+          await gameOver("No more cubes of that color!");
+          return;
+        }
 
         // Check for chain outbreak
         if (connectingCity.GetCubeCount() >= OUTBREAK_CUBE_THRESHOLD) {
@@ -246,12 +266,12 @@ const useGameFlowContext = () => {
   };
 
   const endTurn = async () => {
+    await drawCards();
+
     setCurrentPlayer((cp) => {
       currentCardCount.current = cp!.playerCards.length;
       return cp;
     });
-
-    await drawCards();
 
     // Check Here
     if (currentCardCount.current > MAX_ALLOWABLE_CARDS) {
