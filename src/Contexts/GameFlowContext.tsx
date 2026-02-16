@@ -37,7 +37,7 @@ const useGameFlowContext = () => {
   const [mustDiscardCards, setMustDiscardCards] = useState(false);
 
   const infectCities = async (disregardedCities: Set<string>) => {
-    setAlert("Infecting Cities...");
+    await setAlert("Infecting Cities...", "info");
 
     const rate = infectionMarker.infectionRate;
 
@@ -49,7 +49,10 @@ const useGameFlowContext = () => {
       }
 
       if (disregardedCities.has(nextCard.city.name)) {
-        setAlert(`Infection prevented in ${nextCard.city.name}`, "success");
+        await setAlert(
+          `Infection prevented in ${nextCard.city.name}`,
+          "success",
+        );
         continue;
       }
 
@@ -65,6 +68,7 @@ const useGameFlowContext = () => {
         continue;
       }
 
+      await setAlert(`Infecting ${nextCard.city.name}...`, "info");
       cubeContainer.current.removeCube(cube!);
 
       await positionAndPlaceCubeOnCity(nextCard.city, cube, CUBE_ZOOM, 1500);
@@ -72,7 +76,7 @@ const useGameFlowContext = () => {
   };
 
   const epidemic = async () => {
-    setAlert("Epidemic...");
+    await setAlert("Epidemic...");
 
     // Increase
     setInfectionMarker((prevMarker) => {
@@ -121,7 +125,7 @@ const useGameFlowContext = () => {
       }
     } else {
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      setAlert(`Epidemic evaded in ${nextCard.city.name}`, "success");
+      await setAlert(`Epidemic evaded in ${nextCard.city.name}`, "success");
     }
 
     // Intensify
@@ -156,18 +160,20 @@ const useGameFlowContext = () => {
     return disregardCities;
   };
 
-  const drawCards = async (): Promise<void> => {
+  const drawCards = async () => {
     for (let i = 0; i < 2; i++) {
       const playerCard = playerCardContainer.current.draw();
       if (!playerCard) {
         await gameOver("No more player cards!");
-        return;
+        return 0;
       }
 
       if (isEpidemicCard(playerCard)) {
         await epidemic();
         continue;
       }
+
+      currentCardCount.current += 1;
 
       setPlayers((prevPlayers) =>
         prevPlayers.map((player) => {
@@ -182,7 +188,7 @@ const useGameFlowContext = () => {
   };
 
   const gameOver = async (message: string) => {
-    setAlert(message);
+    await setAlert(message);
     await new Promise((resolve) => setTimeout(resolve, 3000));
     setGameOver(true);
   };
@@ -193,11 +199,9 @@ const useGameFlowContext = () => {
     disregardCities: Set<string>,
   ) => {
     if (disregardCities.has(outbrokenCity.name)) {
-      setAlert(`Outbreak evaded in ${outbrokenCity.name}`, "success");
+      await setAlert(`Outbreak evaded in ${outbrokenCity.name}`, "success");
       return;
     }
-
-    setAlert(`Outbreak in ${outbrokenCity.name}!`);
 
     if (citiesWithOutbreaks.has(outbrokenCity.name)) {
       const cube = cubeContainer.current.getCube(outbrokenCity.color);
@@ -210,6 +214,8 @@ const useGameFlowContext = () => {
 
       await positionAndPlaceCubeOnCity(outbrokenCity, cube, CUBE_ZOOM, 1500);
     } else {
+      await setAlert(`Outbreak in ${outbrokenCity.name}!`);
+
       // Need to outbreak
       citiesWithOutbreaks.add(outbrokenCity.name);
 
@@ -266,14 +272,14 @@ const useGameFlowContext = () => {
   };
 
   const endTurn = async () => {
-    await drawCards();
-
-    setCurrentPlayer((cp) => {
-      currentCardCount.current = cp!.playerCards.length;
-      return cp;
+    setCurrentPlayer((pp) => {
+      currentCardCount.current = pp!.playerCards.length;
+      return pp;
     });
 
-    // Check Here
+    await drawCards();
+
+    // Check if player has too many cards
     if (currentCardCount.current > MAX_ALLOWABLE_CARDS) {
       setMustDiscardCards(true);
       return;

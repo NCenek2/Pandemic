@@ -1,34 +1,48 @@
-import { createContext, useCallback, useState } from "react";
+import { createContext, useCallback, useRef, useState } from "react";
 import type { ChildrenType } from "../Types/ChildrenType";
 
-type AlertType = "danger" | "warning" | "success";
-
-let timeout: ReturnType<typeof setTimeout> | null = null;
+type AlertType = "danger" | "warning" | "success" | "info";
 
 const useAlertContext = () => {
-  const [alert, setAle] = useState("");
+  const [alert, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<AlertType>("danger");
 
-  const setAlert = useCallback(
-    (message: string, type: AlertType = "danger") => {
-      setAlertType(type);
-      setShowAlert(true);
-      setAle(message);
-      timeout = setTimeout(() => {
-        hideAlert();
-      }, 4000);
-    },
-    [],
-  );
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resolverRef = useRef<(() => void) | null>(null);
 
   const hideAlert = useCallback(() => {
-    if (timeout !== null) {
-      clearTimeout(timeout);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
+
     setShowAlert(false);
-    setAle("");
+    setAlertMessage("");
+
+    // Resolve the awaiting Promise
+    if (resolverRef.current != null) {
+      resolverRef.current();
+      resolverRef.current = null;
+    }
   }, []);
+
+  const setAlert = useCallback(
+    (message: string, type: AlertType = "danger") => {
+      return new Promise<void>((resolve) => {
+        setAlertType(type);
+        setAlertMessage(message);
+        setShowAlert(true);
+
+        resolverRef.current = resolve;
+
+        timeoutRef.current = setTimeout(() => {
+          hideAlert();
+        }, 1500);
+      });
+    },
+    [hideAlert],
+  );
 
   return { alertType, alert, setAlert, hideAlert, showAlert };
 };
@@ -39,7 +53,7 @@ const initialAlertContext: UseAlertContextType = {
   alertType: "danger",
   alert: "",
   showAlert: false,
-  setAlert: () => {},
+  setAlert: () => Promise.resolve(),
   hideAlert: () => {},
 };
 
