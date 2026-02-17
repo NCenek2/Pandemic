@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import type { CityCard } from "../Game/Cards/CityCard";
-import { DEFAULT_ALLOWABLE_CARDS } from "../Game/Constants/Constants";
 import { isCityCard } from "../Guards/guards";
 import { useGame } from "../Hooks/useGame";
 import useGameFlow from "../Hooks/useGameFlow";
@@ -69,7 +68,7 @@ const DiscardCards = () => {
         ))}
       </ListGroup>
       <Button
-        disabled={currentCards != DEFAULT_ALLOWABLE_CARDS}
+        disabled={currentCards != currentPlayer!.role.allowableCards}
         onClick={discard}
       >
         Discard
