@@ -27,6 +27,9 @@ export class MovePawnToPawnAction implements IRoleAction {
     const selectedPlayer = gameState.selectedPlayer!;
     const selectedCity = gameState.selectedCity!;
 
+    // Do Pre-Action Logic
+    selectedPlayer.role.onExecute(gameState);
+
     this._selectedPlayer = selectedPlayer;
     this._previousLocation = selectedPlayer.currentLocation;
 
@@ -43,6 +46,9 @@ export class MovePawnToPawnAction implements IRoleAction {
   }
 
   Undo(gameState: IGameState): void {
+    // Do Pre-Undo Logic
+    this._selectedPlayer?.role.onUndo(gameState);
+
     // Move Selected Player To Previous City
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {

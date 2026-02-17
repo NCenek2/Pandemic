@@ -14,11 +14,12 @@ import { BuildResearchStationAction } from "./Actions/BuildResearchStationAction
 import { CharterFlightAction } from "./Actions/CharterFlightAction";
 import { DirectFlightAction } from "./Actions/DirectFlightAction";
 import { DiscoverCureAction } from "./Actions/DiscoverCureAction";
-import { DriveOrFerryMedicAction } from "./Actions/DriveOrFerryActionMedicAction";
+import { DriveOrFerryAction } from "./Actions/DriveOrFerryAction";
 import { ShareKnowledgeAction } from "./Actions/ShareKnowledgeAction";
 import { ShuttleFlightAction } from "./Actions/ShuttleFlightAction";
 import { TreatDiseaseActionMedicAction } from "./Actions/TreatDiseaseMedicAction";
 import { UseEventAction } from "./Actions/UseEventAction";
+import { MedicTurnState } from "./TurnState/MedicTurnState";
 
 export class Medic implements IRole {
   public name: RoleName = "Medic";
@@ -27,13 +28,15 @@ export class Medic implements IRole {
   public actionCount: number = DEFAULT_ACTIONS_PER_TURN;
   public allowableCards: number = DEFAULT_ALLOWABLE_CARDS;
 
+  private mediaTurnState: MedicTurnState = new MedicTurnState();
+
   public get actions(): MapperType {
     return this._actions;
   }
   constructor() {
     this._actions = {
       "Drive/Ferry": {
-        action: new DriveOrFerryMedicAction(),
+        action: new DriveOrFerryAction(),
         element: <CityMapper />,
       },
       "Direct Flight": {
@@ -77,13 +80,9 @@ export class Medic implements IRole {
     }
   }
   onExecute(gameState: IGameState): void {
-    {
-      gameState;
-    }
+    this.mediaTurnState.OnExecute(gameState);
   }
   onUndo(gameState: IGameState): void {
-    {
-      gameState;
-    }
+    this.mediaTurnState.OnUndo(gameState);
   }
 }

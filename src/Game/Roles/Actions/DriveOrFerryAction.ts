@@ -25,6 +25,9 @@ export class DriveOrFerryAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer!;
     const destination = gameState.selectedCity!;
 
+    // Do Pre-Action Logic
+    currentPlayer.role.onExecute(gameState);
+
     this._previousLocation = currentPlayer.currentLocation;
 
     // Move To Destination
@@ -41,6 +44,9 @@ export class DriveOrFerryAction implements IRoleAction {
 
   Undo(gameState: IGameState): void {
     const currentPlayer = gameState.currentPlayer!;
+
+    // Do Pre-Undo Logic
+    currentPlayer.role.onUndo(gameState);
 
     // Move To Previous Location
     gameState.setPlayers((prevPlayers) =>

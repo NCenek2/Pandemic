@@ -29,6 +29,9 @@ export class ShuttleFlightAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer!;
     const destination = gameState.selectedCity!;
 
+    // Do Pre-Action Logic
+    currentPlayer.role.onExecute(gameState);
+
     this._previousLocation = currentPlayer.currentLocation;
 
     gameState.setPlayers((prevPlayers) =>
@@ -44,6 +47,9 @@ export class ShuttleFlightAction implements IRoleAction {
 
   Undo(gameState: IGameState): void {
     const currentPlayer = gameState.currentPlayer!;
+
+    // Do Pre-Undo Logic
+    currentPlayer.role.onUndo(gameState);
 
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {

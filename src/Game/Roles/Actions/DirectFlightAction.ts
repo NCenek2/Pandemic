@@ -30,6 +30,9 @@ export class DirectFlightAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer!;
     const destination = gameState.selectedCity!;
 
+    // Do Pre-Action Logic
+    currentPlayer.role.onExecute(gameState);
+
     this._previousCity = currentPlayer.currentLocation;
 
     gameState.setPlayers((prevPlayers) =>
@@ -65,6 +68,9 @@ export class DirectFlightAction implements IRoleAction {
 
   Undo(gameState: IGameState): void {
     const currentPlayer = gameState.currentPlayer!;
+
+    // Do Pre-Undo Logic
+    currentPlayer.role.onUndo(gameState);
 
     // Add Back Player Card
     gameState.playerCardContainer.current.removeFromDiscard(

@@ -29,6 +29,9 @@ export class CharterFlightAction implements IRoleAction {
     const previousLocation = currentPlayer.currentLocation;
     const destination = gameState.selectedCity!;
 
+    // Do Pre-Action Logic
+    currentPlayer.role.onExecute(gameState);
+
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {
         if (player == currentPlayer) {
@@ -63,6 +66,9 @@ export class CharterFlightAction implements IRoleAction {
 
   Undo(gameState: IGameState): void {
     const currentPlayer = gameState.currentPlayer!;
+
+    // Do Pre-Undo Logic
+    currentPlayer.role.onUndo(gameState);
 
     // Add Back Player Card and Move To Cards Previous Location
     gameState.playerCardContainer.current.removeFromDiscard(
