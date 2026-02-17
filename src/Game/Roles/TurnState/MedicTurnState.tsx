@@ -6,15 +6,26 @@ export class MedicTurnState {
   private _automaticallyRemovedCubes: Cube[] = [];
 
   OnExecute(gameState: IGameState): void {
+    const currentPlayer = gameState.currentPlayer!;
     const destination = gameState.selectedCity!;
 
     this._automaticallyRemovedCubes = [];
 
-    for (const cube of destination.elements.filter((element) =>
-      isCube(element),
-    ) as Cube[]) {
-      this._automaticallyRemovedCubes.push(cube);
-    }
+    gameState.setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => {
+        if (player == currentPlayer) {
+          for (const cube of destination.elements.filter((element) =>
+            isCube(element),
+          ) as Cube[]) {
+            destination.removeCube(cube);
+            gameState.cubeContainer.current.addCube(cube);
+            this._automaticallyRemovedCubes.push(cube);
+          }
+          return player;
+        }
+        return player;
+      }),
+    );
   }
 
   OnUndo(gameState: IGameState): void {
