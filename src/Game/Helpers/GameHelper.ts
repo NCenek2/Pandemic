@@ -14,6 +14,7 @@ import { Player } from "../Player";
 import { ContainmentSpecialist } from "../Roles/ContainmentSpecialist";
 import { ContingencyPlanner } from "../Roles/ContingencyPlanner";
 import { Dispatcher } from "../Roles/Dispatcher";
+import { Generalist } from "../Roles/Generalist";
 import { Medic } from "../Roles/Medic";
 import { OperationsExpert } from "../Roles/OperationsExpert";
 import { QuarantineSpecialist } from "../Roles/QuarantineSpecialist";
@@ -37,6 +38,7 @@ export class GameHelper {
       new Dispatcher(),
       new Medic(),
       new ContainmentSpecialist(),
+      new Generalist(),
       new OperationsExpert(),
       new QuarantineSpecialist(),
       new Researcher(),

@@ -10,7 +10,8 @@ export type RoleName =
   | "Operations Expert"
   | "Contingency Planner"
   | "Field Operative"
-  | "Containment Specialist";
+  | "Containment Specialist"
+  | "Generalist";
 
 export interface IRole {
   name: RoleName;
