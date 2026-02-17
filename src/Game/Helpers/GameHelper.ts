@@ -11,6 +11,7 @@ import type { ResearchStationContainer } from "../Containers/ResearchStationCont
 import type { Cure } from "../Cure";
 import { Game } from "../Game";
 import { Player } from "../Player";
+import { ContainmentSpecialist } from "../Roles/ContainmentSpecialist";
 import { ContingencyPlanner } from "../Roles/ContingencyPlanner";
 import { Dispatcher } from "../Roles/Dispatcher";
 import { Medic } from "../Roles/Medic";
@@ -35,6 +36,7 @@ export class GameHelper {
       new ContingencyPlanner(),
       new Dispatcher(),
       new Medic(),
+      new ContainmentSpecialist(),
       new OperationsExpert(),
       new QuarantineSpecialist(),
       new Researcher(),
