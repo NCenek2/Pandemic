@@ -1,5 +1,7 @@
 export const DEFAULT_ACTIONS_PER_TURN = 4;
 export const DEFAULT_ALLOWABLE_CARDS = 7;
+export const DEFAULT_CURE_CARDS_REQUIRED = 5;
+export const SCIENTIST_CURE_CARDS_REQUIRED = 4;
 export const DEFAULT_ZOOM = 3;
 export const CUBE_ZOOM = 5;
 export const BASENAME = "/Pandemic";

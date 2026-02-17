@@ -4,6 +4,7 @@ import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IPlayerCard } from "../../../Intefaces/IPlayerCard";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
 import type { CityCard } from "../../Cards/CityCard";
+import { SCIENTIST_CURE_CARDS_REQUIRED } from "../../Constants/Constants";
 
 export class DiscoverCureScientistAction implements IRoleAction {
   public Name: string = "Discover Cure";
@@ -19,7 +20,7 @@ export class DiscoverCureScientistAction implements IRoleAction {
     if (currentPlayer == null || color == null || selectedCards == null)
       return false;
 
-    if (selectedCards.length !== 4) return false;
+    if (selectedCards.length !== SCIENTIST_CURE_CARDS_REQUIRED) return false;
 
     for (const card of selectedCards) {
       if (!isCityCard(card)) return false;
