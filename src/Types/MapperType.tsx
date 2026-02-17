@@ -18,6 +18,7 @@ export type ActionsType =
   | "Discover Cure"
   | "Use Event"
   | "Store Event"
-  | "Move Pawn To Pawn";
+  | "Move Pawn To Pawn"
+  | "Restore City Card";
 
 export type MapperType = Partial<Record<ActionsType, MapperItemType>>;
