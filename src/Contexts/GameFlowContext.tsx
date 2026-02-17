@@ -3,7 +3,6 @@ import { City } from "../Game/City";
 import {
   CUBE_ZOOM,
   DEFAULT_ZOOM,
-  MAX_ALLOWABLE_CARDS,
   OUTBREAK_CUBE_THRESHOLD,
 } from "../Game/Constants/Constants";
 import type { Cure } from "../Game/Cure";
@@ -280,7 +279,7 @@ const useGameFlowContext = () => {
     await drawCards();
 
     // Check if player has too many cards
-    if (currentCardCount.current > MAX_ALLOWABLE_CARDS) {
+    if (currentCardCount.current > currentPlayer!.role.allowableCards) {
       setMustDiscardCards(true);
       return;
     }

@@ -13,4 +13,6 @@ export type RoleName =
 export interface IRole {
   name: RoleName;
   actions: MapperType;
+  actionCount: number;
+  allowableCards: number;
 }

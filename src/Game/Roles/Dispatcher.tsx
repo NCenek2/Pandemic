@@ -7,6 +7,10 @@ import PlayerCityMapper from "../../Features/Roles/Mapper/PlayerCityMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
 import type { IRole, RoleName } from "../../Intefaces/IRole";
 import type { MapperType } from "../../Types/MapperType";
+import {
+  DEFAULT_ACTIONS_PER_TURN,
+  DEFAULT_ALLOWABLE_CARDS,
+} from "../Constants/Constants";
 import { BuildResearchStationAction } from "./Actions/BuildResearchStationAction";
 import { CharterFlightAction } from "./Actions/CharterFlightAction";
 import { DirectFlightAction } from "./Actions/DirectFlightAction";
@@ -21,6 +25,9 @@ import { UseEventAction } from "./Actions/UseEventAction";
 export class Dispatcher implements IRole {
   public name: RoleName = "Dispatcher";
   private readonly _actions: MapperType;
+
+  public actionCount: number = DEFAULT_ACTIONS_PER_TURN;
+  public allowableCards: number = DEFAULT_ALLOWABLE_CARDS;
 
   public get actions(): MapperType {
     return this._actions;

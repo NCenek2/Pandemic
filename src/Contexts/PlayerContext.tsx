@@ -7,7 +7,6 @@ import {
 } from "react";
 import { Color } from "../Enums/Color";
 import { City } from "../Game/City";
-import { TURNS_PER_ROUND } from "../Game/Constants/Constants";
 import { Player } from "../Game/Player";
 import useGame from "../Hooks/useGame";
 import useGameFlow from "../Hooks/useGameFlow";
@@ -64,7 +63,7 @@ const usePlayerContext = () => {
     setHasChanged((prev) => !prev);
     turnCount.current += 1;
 
-    if (turnCount.current % TURNS_PER_ROUND === 0) {
+    if (turnCount.current % game.currentPlayer!.role.actionCount === 0) {
       endTurn();
       await gameFlow.endTurn();
     } else {
