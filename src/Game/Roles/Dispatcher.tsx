@@ -5,6 +5,7 @@ import DiscoverCureMapper from "../../Features/Roles/Mapper/DiscoverCureMapper";
 import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
 import PlayerCityMapper from "../../Features/Roles/Mapper/PlayerCityMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
+import type { IGameState } from "../../Intefaces/IGameState";
 import type { IRole, RoleName } from "../../Intefaces/IRole";
 import type { MapperType } from "../../Types/MapperType";
 import {
@@ -75,5 +76,21 @@ export class Dispatcher implements IRole {
         element: <PlayerCityMapper />,
       },
     };
+  }
+
+  onTurnEnd(gameState: IGameState): void {
+    {
+      gameState;
+    }
+  }
+  onExecute(gameState: IGameState): void {
+    {
+      gameState;
+    }
+  }
+  onUndo(gameState: IGameState): void {
+    {
+      gameState;
+    }
   }
 }
