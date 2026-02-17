@@ -1,6 +1,7 @@
 import { isResearchStation } from "../../../Guards/guards";
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
+import { isIRoleCommand } from "../../../Intefaces/IRoleCommand";
 import type { City } from "../../City";
 
 export class ShuttleFlightAction implements IRoleAction {
@@ -30,7 +31,9 @@ export class ShuttleFlightAction implements IRoleAction {
     const destination = gameState.selectedCity!;
 
     // Do Pre-Action Logic
-    currentPlayer.role.onExecute(gameState);
+    if (isIRoleCommand(currentPlayer.role)) {
+      currentPlayer.role.onExecute(gameState);
+    }
 
     this._previousLocation = currentPlayer.currentLocation;
 
@@ -49,7 +52,9 @@ export class ShuttleFlightAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer!;
 
     // Do Pre-Undo Logic
-    currentPlayer.role.onUndo(gameState);
+    if (isIRoleCommand(currentPlayer.role)) {
+      currentPlayer.role.onUndo(gameState);
+    }
 
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {

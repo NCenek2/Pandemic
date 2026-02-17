@@ -4,7 +4,6 @@ import ColorMapper from "../../Features/Roles/Mapper/ColorMapper";
 import DiscoverCureMapper from "../../Features/Roles/Mapper/DiscoverCureMapper";
 import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
-import type { IGameState } from "../../Intefaces/IGameState";
 import type { IRole, RoleName } from "../../Intefaces/IRole";
 import type { MapperType } from "../../Types/MapperType";
 import {
@@ -77,20 +76,5 @@ export class ContingencyPlanner implements IRole {
         element: <EmptyMapper />,
       },
     };
-  }
-  onTurnEnd(gameState: IGameState): void {
-    {
-      gameState;
-    }
-  }
-  onExecute(gameState: IGameState): void {
-    {
-      gameState;
-    }
-  }
-  onUndo(gameState: IGameState): void {
-    {
-      gameState;
-    }
   }
 }

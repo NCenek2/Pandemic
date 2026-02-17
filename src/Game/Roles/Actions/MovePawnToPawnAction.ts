@@ -1,5 +1,6 @@
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
+import { isIRoleCommand } from "../../../Intefaces/IRoleCommand";
 import type { City } from "../../City";
 import type { Player } from "../../Player";
 
@@ -28,7 +29,9 @@ export class MovePawnToPawnAction implements IRoleAction {
     const selectedCity = gameState.selectedCity!;
 
     // Do Pre-Action Logic
-    selectedPlayer.role.onExecute(gameState);
+    if (isIRoleCommand(selectedPlayer.role)) {
+      selectedPlayer.role.onExecute(gameState);
+    }
 
     this._selectedPlayer = selectedPlayer;
     this._previousLocation = selectedPlayer.currentLocation;
@@ -47,7 +50,10 @@ export class MovePawnToPawnAction implements IRoleAction {
 
   Undo(gameState: IGameState): void {
     // Do Pre-Undo Logic
-    this._selectedPlayer?.role.onUndo(gameState);
+
+    if (isIRoleCommand(this._selectedPlayer!.role)) {
+      this._selectedPlayer!.role.onUndo(gameState);
+    }
 
     // Move Selected Player To Previous City
     gameState.setPlayers((prevPlayers) =>

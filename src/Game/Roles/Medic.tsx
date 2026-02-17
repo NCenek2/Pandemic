@@ -5,6 +5,7 @@ import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
 import type { IGameState } from "../../Intefaces/IGameState";
 import type { IRole, RoleName } from "../../Intefaces/IRole";
+import type { IRoleCommand } from "../../Intefaces/IRoleCommand";
 import type { MapperType } from "../../Types/MapperType";
 import {
   DEFAULT_ACTIONS_PER_TURN,
@@ -21,7 +22,7 @@ import { TreatDiseaseActionMedicAction } from "./Actions/TreatDiseaseMedicAction
 import { UseEventAction } from "./Actions/UseEventAction";
 import { MedicTurnState } from "./TurnState/MedicTurnState";
 
-export class Medic implements IRole {
+export class Medic implements IRole, IRoleCommand {
   public name: RoleName = "Medic";
   private readonly _actions: MapperType;
 
@@ -74,11 +75,6 @@ export class Medic implements IRole {
     };
   }
 
-  onTurnEnd(gameState: IGameState): void {
-    {
-      gameState;
-    }
-  }
   onExecute(gameState: IGameState): void {
     this.mediaTurnState.OnExecute(gameState);
   }

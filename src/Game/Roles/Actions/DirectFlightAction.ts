@@ -1,6 +1,7 @@
 import { isCityCard } from "../../../Guards/guards";
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { IRoleAction } from "../../../Intefaces/IRoleAction";
+import { isIRoleCommand } from "../../../Intefaces/IRoleCommand";
 import type { CityCard } from "../../Cards/CityCard";
 import type { City } from "../../City";
 
@@ -31,7 +32,9 @@ export class DirectFlightAction implements IRoleAction {
     const destination = gameState.selectedCity!;
 
     // Do Pre-Action Logic
-    currentPlayer.role.onExecute(gameState);
+    if (isIRoleCommand(currentPlayer.role)) {
+      currentPlayer.role.onExecute(gameState);
+    }
 
     this._previousCity = currentPlayer.currentLocation;
 
@@ -70,7 +73,9 @@ export class DirectFlightAction implements IRoleAction {
     const currentPlayer = gameState.currentPlayer!;
 
     // Do Pre-Undo Logic
-    currentPlayer.role.onUndo(gameState);
+    if (isIRoleCommand(currentPlayer.role)) {
+      currentPlayer.role.onUndo(gameState);
+    }
 
     // Add Back Player Card
     gameState.playerCardContainer.current.removeFromDiscard(

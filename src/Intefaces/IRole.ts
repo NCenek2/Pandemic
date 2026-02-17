@@ -1,5 +1,6 @@
 import type { MapperType } from "../Types/MapperType";
-import type { IGameState } from "./IGameState";
+
+export type RoleAttributes = "COMMAND";
 
 export type RoleName =
   | "Dispatcher"
@@ -19,7 +20,4 @@ export interface IRole {
   actions: MapperType;
   actionCount: number;
   allowableCards: number;
-  onTurnEnd(gameState: IGameState): void;
-  onExecute(gameState: IGameState): void;
-  onUndo(gameState: IGameState): void;
 }

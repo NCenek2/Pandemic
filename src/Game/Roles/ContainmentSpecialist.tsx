@@ -5,6 +5,7 @@ import EmptyMapper from "../../Features/Roles/Mapper/EmptyMapper";
 import ShareKnowledgeMapper from "../../Features/Roles/Mapper/ShareKnowledgeMapper";
 import type { IGameState } from "../../Intefaces/IGameState";
 import type { IRole, RoleName } from "../../Intefaces/IRole";
+import type { IRoleCommand } from "../../Intefaces/IRoleCommand";
 import type { MapperType } from "../../Types/MapperType";
 import {
   DEFAULT_ACTIONS_PER_TURN,
@@ -21,7 +22,7 @@ import { TreatDiseaseAction } from "./Actions/TreatDiseaseAction";
 import { UseEventAction } from "./Actions/UseEventAction";
 import { ContainmentSpecialistTurnState } from "./TurnState/ContainmentSpecialistTurnState";
 
-export class ContainmentSpecialist implements IRole {
+export class ContainmentSpecialist implements IRole, IRoleCommand {
   public name: RoleName = "Containment Specialist";
   private readonly _actions: MapperType;
 
@@ -75,11 +76,6 @@ export class ContainmentSpecialist implements IRole {
     };
   }
 
-  onTurnEnd(gameState: IGameState): void {
-    {
-      gameState;
-    }
-  }
   onExecute(gameState: IGameState): void {
     this.containmentSpecialistTurnState.OnExecute(gameState);
   }
