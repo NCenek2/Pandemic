@@ -19,6 +19,28 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const isCtrlR =
+        (event.ctrlKey && event.key.toLowerCase() === "r") ||
+        (event.metaKey && event.key.toLowerCase() === "r");
+
+      if (isCtrlR) {
+        event.preventDefault(); // Stop browser reload
+        navigate("/"); // Navigate to home route
+        window.location.reload();
+      }
+    };
+
+    // Attach event listener
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup on unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
     for (const cure of cures) {
       if (!cure.cured) return;
     }
