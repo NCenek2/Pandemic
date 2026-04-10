@@ -5,4 +5,12 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   base: "/Pandemic",
+  server: {
+    port: 5173,
+    host: true,
+    strictPort: true,
+    watch: {
+      usePolling: true,
+    },
+  },
 });
