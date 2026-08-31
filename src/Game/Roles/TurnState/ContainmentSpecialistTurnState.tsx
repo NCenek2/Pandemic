@@ -1,3 +1,4 @@
+import { Color } from "../../../Enums/Color";
 import { isCube } from "../../../Guards/guards";
 import type { IGameState } from "../../../Intefaces/IGameState";
 import type { Cube } from "../../Elements/Cube";
@@ -9,25 +10,37 @@ export class ContainmentSpecialistTurnState {
     const currentPlayer = gameState.currentPlayer!;
     const destination = gameState.selectedCity!;
 
+    // If a destination has two or more cubes of 
+    // the same color. It will automatically be removed.
+
+    const cubeCountMap = new Map<Color, Cube[]>();
+    destination.elements.forEach((element) => {
+      if (isCube(element)) {
+        const cube = element as Cube;
+        if (!cubeCountMap.has(cube.color)) {
+          cubeCountMap.set(cube.color, []);
+        }
+        const cubeArray = cubeCountMap.get(cube.color) as Cube[];
+        cubeArray.push(cube);
+      }
+    });
+
     this._automaticallyRemovedCubes = [];
 
     gameState.setPlayers((prevPlayers) =>
       prevPlayers.map((player) => {
         if (player == currentPlayer) {
-          const cubesInCity = destination.elements.filter((element) =>
-            isCube(element),
-          ) as Cube[];
+          for (let [_, cubes] of cubeCountMap.entries()) {
+            if (cubes.length <= 1) continue;
 
-          if (cubesInCity.length <= 1) return player;
-          
-          for (const cube of cubesInCity) {
+            const cube = cubes[0];
+
             destination.removeCube(cube);
             gameState.cubeContainer.current.addCube(cube);
             this._automaticallyRemovedCubes.push(cube);
-            break;
           }
-          return player;
         }
+
         return player;
       }),
     );
