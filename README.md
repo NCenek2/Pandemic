@@ -1,5 +1,11 @@
 # React + TypeScript + Vite
 
+# Todo. 
+# 1. Take state from PlayerContext and make functions of context to TurnContext.
+# 2. IRoleCommand/IRoleEndTurn should be made more extensible. Medic/Containment Specialist have it but
+# there should be options for BeforeExecute/ AfterExecute, BeforeUndo/AfterUndo
+# 3. Implement Event Cards
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
