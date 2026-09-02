@@ -137,7 +137,7 @@ const useGameFlowContext = () => {
       const playerCard = playerCardContainer.current.draw();
       if (!playerCard) {
         await endGame("No more player cards!");
-        return 0;
+        return;
       }
 
       if (isEpidemicCard(playerCard)) {
