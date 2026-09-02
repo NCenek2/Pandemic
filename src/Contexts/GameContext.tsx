@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useRef,
-  useState,
-  type MutableRefObject,
-  type ReactElement,
-} from "react";
+import { createContext, useRef, useState, type ReactElement } from "react";
 import { City } from "../Game/City";
 import { CubeContainer } from "../Game/Containers/CubeContainer";
 import { InfectionCardContainer } from "../Game/Containers/InfectionCardContainer";
@@ -76,8 +70,6 @@ const useGameContext = () => {
 
   const [cures, setCures] = useState(_cures);
 
-  const [gameOver, setGameOver] = useState(false);
-
   return {
     players,
     setPlayers,
@@ -95,8 +87,6 @@ const useGameContext = () => {
     cubeContainer,
     setInfectionMarker,
     setOutbreakMarker,
-    gameOver,
-    setGameOver,
   };
 };
 
@@ -115,20 +105,18 @@ const initContextState: UseGameContextType = {
   setCures: () => {},
   playerCardContainer: {
     current: new PlayerCardContainer([]),
-  } as MutableRefObject<PlayerCardContainer>,
+  },
   infectionCardContainer: {
     current: new InfectionCardContainer([]),
-  } as MutableRefObject<InfectionCardContainer>,
+  },
   researchStationContainer: {
     current: new ResearchStationContainer(),
-  } as MutableRefObject<ResearchStationContainer>,
+  },
   setInfectionMarker: () => {},
   setOutbreakMarker: () => {},
   cubeContainer: {
     current: new CubeContainer(),
-  } as MutableRefObject<CubeContainer>,
-  gameOver: false,
-  setGameOver: () => {},
+  },
 };
 
 export const GameContext = createContext<UseGameContextType>(initContextState);

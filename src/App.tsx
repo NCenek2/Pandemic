@@ -14,8 +14,8 @@ import { useGame } from "./Hooks/useGame";
 import useGameFlow from "./Hooks/useGameFlow";
 
 function App() {
-  const { outbreakMarker, cures, gameOver } = useGame();
-  const { mustDiscardCards } = useGameFlow();
+  const { outbreakMarker, cures } = useGame();
+  const { isGameOver, mustDiscardCards } = useGameFlow();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,10 +49,10 @@ function App() {
   }, [cures]);
 
   useEffect(() => {
-    if (gameOver || outbreakMarker.outbreaks >= MAX_OUTBREAKS) {
+    if (isGameOver || outbreakMarker.outbreaks >= MAX_OUTBREAKS) {
       navigate(LOST_GAME_URL);
     }
-  }, [outbreakMarker, gameOver]);
+  }, [outbreakMarker, isGameOver]);
 
   return (
     <div className="d-flex flex-column">

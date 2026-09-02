@@ -5,9 +5,9 @@ import {
   DEFAULT_ZOOM,
   OUTBREAK_CUBE_THRESHOLD,
 } from "../Game/Constants/Constants";
-import type { Cure } from "../Game/Cure";
 import type { Cube } from "../Game/Elements/Cube";
 import { isEpidemicCard } from "../Guards/guards";
+import getDisregardedCities from "../Helpers/GameFlowContextHelper";
 import { useAlert } from "../Hooks/useAlert";
 import useCamera from "../Hooks/useCamera";
 import useGame from "../Hooks/useGame";
@@ -16,7 +16,6 @@ import type { ChildrenType } from "../Types/ChildrenType";
 const useGameFlowContext = () => {
   const { setPosition } = useCamera();
   const { setAlert } = useAlert();
-  const currentCardCount = useRef(0);
   const {
     infectionMarker,
     infectionCardContainer,
@@ -29,10 +28,12 @@ const useGameFlowContext = () => {
     currentPlayer,
     setCurrentPlayer,
     setOutbreakMarker,
-    setGameOver,
     cures,
   } = useGame();
 
+  const [isGameOver, setIsGameOver] = useState(false);
+
+  const currentCardCount = useRef(0);
   const [mustDiscardCards, setMustDiscardCards] = useState(false);
 
   const infectCities = async (disregardedCities: Set<string>) => {
@@ -43,7 +44,7 @@ const useGameFlowContext = () => {
     for (let i = 0; i < rate; i++) {
       const nextCard = infectionCardContainer.current.draw();
       if (!nextCard) {
-        await gameOver("No more infection cards!");
+        await endGame("No more infection cards!");
         return;
       }
 
@@ -57,7 +58,7 @@ const useGameFlowContext = () => {
 
       const cube = cubeContainer.current.getCube(nextCard.city.color);
       if (!cube) {
-        await gameOver("No more cubes of that color!");
+        await endGame("No more cubes of that color!");
         return;
       }
 
@@ -87,11 +88,11 @@ const useGameFlowContext = () => {
     // Infect
     const nextCard = infectionCardContainer.current.drawFromBottom();
     if (!nextCard) {
-      await gameOver("No more infection cards!");
+      await endGame("No more infection cards!");
       return;
     }
 
-    const disregardCities = getDisregardedCities();
+    const disregardCities = getDisregardedCities(players, cures);
 
     if (!disregardCities.has(nextCard.city.name)) {
       setPosition({
@@ -104,7 +105,7 @@ const useGameFlowContext = () => {
       for (let i = 0; i < 3; i++) {
         const cube = cubeContainer.current.getCube(nextCard.city.color);
         if (!cube) {
-          await gameOver("No more cubes of that color!");
+          await endGame("No more cubes of that color!");
           return;
         }
 
@@ -131,39 +132,11 @@ const useGameFlowContext = () => {
     infectionCardContainer.current.intensify();
   };
 
-  const getDisregardedCities = (): Set<string> => {
-    const quarantineSpecialist = players.find(
-      (player) => player.role.name === "Quarantine Specialist",
-    );
-
-    const medic = players.find((player) => player.role.name === "Medic");
-
-    const disregardCities = new Set<string>();
-    if (quarantineSpecialist) {
-      disregardCities.add(quarantineSpecialist.currentLocation.name);
-      for (const connectingCity of quarantineSpecialist.currentLocation
-        .connections)
-        disregardCities.add(connectingCity.name);
-    }
-
-    if (medic) {
-      // Medic also disregards cities with cured diseases
-      const medicLocationCureColor = cures.find(
-        (cure) => cure.color === medic.currentLocation.color,
-      ) as Cure;
-
-      if (medicLocationCureColor.cured) {
-        disregardCities.add(medic.currentLocation.name);
-      }
-    }
-    return disregardCities;
-  };
-
   const drawCards = async () => {
     for (let i = 0; i < 2; i++) {
       const playerCard = playerCardContainer.current.draw();
       if (!playerCard) {
-        await gameOver("No more player cards!");
+        await endGame("No more player cards!");
         return 0;
       }
 
@@ -186,10 +159,10 @@ const useGameFlowContext = () => {
     }
   };
 
-  const gameOver = async (message: string) => {
+  const endGame = async (message: string) => {
     await setAlert(message);
     await new Promise((resolve) => setTimeout(resolve, 3000));
-    setGameOver(true);
+    setIsGameOver(true);
   };
 
   const outbreak = async (
@@ -205,7 +178,7 @@ const useGameFlowContext = () => {
     if (citiesWithOutbreaks.has(outbrokenCity.name)) {
       const cube = cubeContainer.current.getCube(outbrokenCity.color);
       if (!cube) {
-        await gameOver("No more cubes of that color!");
+        await endGame("No more cubes of that color!");
         return;
       }
 
@@ -227,7 +200,7 @@ const useGameFlowContext = () => {
       for (const connectingCity of outbrokenCity.connections) {
         const cube = cubeContainer.current.getCube(connectingCity.color);
         if (!cube) {
-          await gameOver("No more cubes of that color!");
+          await endGame("No more cubes of that color!");
           return;
         }
 
@@ -270,23 +243,6 @@ const useGameFlowContext = () => {
     await new Promise((resolve) => setTimeout(resolve, timeout));
   };
 
-  const endTurn = async () => {
-    setCurrentPlayer((pp) => {
-      currentCardCount.current = pp!.playerCards.length;
-      return pp;
-    });
-
-    await drawCards();
-
-    // Check if player has too many cards
-    if (currentCardCount.current > currentPlayer!.role.allowableCards) {
-      setMustDiscardCards(true);
-      return;
-    }
-
-    await postCardDraw();
-  };
-
   const postCardDraw = async () => {
     setMustDiscardCards(false);
 
@@ -298,7 +254,7 @@ const useGameFlowContext = () => {
     const nextIndex = (currentIndex + 1) % playerCount;
     const nextPlayer = players[nextIndex];
 
-    const disregardCities = getDisregardedCities();
+    const disregardCities = getDisregardedCities(players, cures);
     await infectCities(disregardCities);
 
     setPosition({
@@ -310,9 +266,11 @@ const useGameFlowContext = () => {
   };
 
   return {
+    currentCardCount,
+    isGameOver,
     mustDiscardCards,
     setMustDiscardCards,
-    endTurn,
+    drawCards,
     postCardDraw,
   };
 };
@@ -320,9 +278,13 @@ const useGameFlowContext = () => {
 export type UseGameFlowContextType = ReturnType<typeof useGameFlowContext>;
 
 const initContextState: UseGameFlowContextType = {
+  currentCardCount: {
+    current: 0,
+  },
+  isGameOver: false,
   mustDiscardCards: false,
   setMustDiscardCards: () => {},
-  endTurn: async () => {},
+  drawCards: async () => {},
   postCardDraw: async () => {},
 };
 

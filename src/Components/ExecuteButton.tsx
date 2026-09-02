@@ -1,15 +1,15 @@
 import { Button } from "react-bootstrap";
-import usePlayer from "../Hooks/usePlayer";
+import useTurn from "../Hooks/useTurn";
 
 type ExecuteButtonProps = {
   onClick?: () => void;
 };
 
 const ExecuteButton = ({ onClick }: ExecuteButtonProps) => {
-  const { isValidAction, executeAction } = usePlayer();
+  const { isValidTurn, executeTurn } = useTurn();
 
   const execute = () => {
-    executeAction();
+    executeTurn();
 
     if (onClick) {
       onClick();
@@ -18,9 +18,9 @@ const ExecuteButton = ({ onClick }: ExecuteButtonProps) => {
 
   return (
     <Button
-      disabled={!isValidAction}
+      disabled={!isValidTurn}
       onClick={() => execute()}
-      className={`btn-md align-self-center ${isValidAction ? "btn-success" : "btn-danger"}`}
+      className={`btn-md align-self-center ${isValidTurn ? "btn-success" : "btn-danger"}`}
     >
       Execute
     </Button>
