@@ -1,0 +1,26 @@
+/* d-flex flex-column gap-3 justify-content-center h-100 align-items-center */
+
+.startup-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  max-width: 400px;
+  padding: 0.5rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.startup-page-card-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.startup-page-card-container div.card {
+  border: none;
+  flex-grow: 1;
+}

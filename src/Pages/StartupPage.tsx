@@ -4,16 +4,17 @@ import ListBox from "../Components/Listbox";
 import { Difficulty } from "../Enums/Difficulty";
 import { PlayerCount } from "../Enums/PlayerCount";
 import useSetup from "../Hooks/useSetup";
+import "./StartupPage.css";
 
 const StartupPage = () => {
   const { updatePlayerCount, updateDifficulty } = useSetup();
 
   return (
-    <div className="d-flex flex-column gap-3 justify-content-center h-100 align-items-center">
+    <div className="startup-page-container">
       <h1>Welcome to Pandemic</h1>
-      <div className="d-flex flex-row gap-3 ">
+      <div className="startup-page-card-container">
         <Card>
-          <h2>Choose Difficulty</h2>
+          <h2>Difficulty</h2>
           <ListBox<Difficulty>
             prefix="difficulty_"
             displayItems={Object.keys(Difficulty).map(
@@ -27,7 +28,7 @@ const StartupPage = () => {
         </Card>
 
         <Card>
-          <h2>Choose Player Count</h2>
+          <h2>Players</h2>
           <ListBox<PlayerCount>
             prefix="count_"
             displayItems={Object.keys(PlayerCount).map(
@@ -41,7 +42,7 @@ const StartupPage = () => {
         </Card>
       </div>
 
-      <Link to={"/game"} className="btn btn-primary">
+      <Link to={"/game"} className="btn btn-primary w-100">
         Start Game
       </Link>
     </div>
